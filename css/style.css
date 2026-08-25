@@ -368,18 +368,6 @@ p {
 
 /* Scripture chapter grid */
 
-.new-study {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-}
-
-.new-study .input {
-  width: auto;
-}
-
 .chapter-grid {
   display: flex;
   flex-wrap: wrap;

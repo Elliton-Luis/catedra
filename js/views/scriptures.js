@@ -106,14 +106,7 @@ export function mount(container) {
   container.innerHTML = `
     <div class="section-header">
       <h1>Escrituras</h1>
-      <p class="metadata">${bibleBooks.length} livros da Bíblia Católica. Escolha um capítulo para ler ou criar um estudo.</p>
-    </div>
-    <div class="new-study">
-      <select id="study-book" class="input" aria-label="Livro">
-        ${bibleBooks.map((b) => `<option value="${b.id}">${escapeHtml(b.displayName)}</option>`).join("")}
-      </select>
-      <select id="study-chapter" class="input" aria-label="Capítulo"></select>
-      <button id="open-study" class="button" type="button">Abrir estudo</button>
+      <p class="metadata">${bibleBooks.length} livros da Bíblia Católica. Abra um livro e escolha um capítulo para ler ou criar um estudo.</p>
     </div>
     <section aria-labelledby="ot-heading">
       <h2 id="ot-heading">Antigo Testamento</h2>
@@ -124,23 +117,6 @@ export function mount(container) {
       ${renderGroups(newTestament, notedByBook)}
     </section>
   `;
-
-  const bookSelect = container.querySelector("#study-book");
-  const chapterSelect = container.querySelector("#study-chapter");
-
-  function fillChapters() {
-    const book = bibleBooks.find((b) => b.id === bookSelect.value) ?? bibleBooks[0];
-    chapterSelect.innerHTML = Array.from({ length: book.chapters }, (_, index) =>
-      `<option value="${index + 1}">${index + 1}</option>`
-    ).join("");
-  }
-
-  fillChapters();
-  bookSelect.addEventListener("change", fillChapters);
-  container.querySelector("#open-study").addEventListener("click", () => {
-    location.hash = `#scriptures/${bookSelect.value}/${chapterSelect.value}`;
-  });
-
   wireFavoriteButtons(container);
 }
 
