@@ -334,6 +334,163 @@ p {
   margin-top: 0.75rem;
 }
 
+/* Editor mode toggle */
+
+.mode-toggle {
+  display: inline-flex;
+  width: max-content;
+  margin-top: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  overflow: hidden;
+}
+
+.mode-toggle button {
+  padding: 0.35rem 0.9rem;
+  border: none;
+  background-color: transparent;
+  color: var(--color-text-soft);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mode-toggle button:hover {
+  color: var(--color-text);
+}
+
+.mode-toggle button[aria-pressed="true"] {
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+}
+
+/* Scripture chapter grid */
+
+.chapter-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.75rem 0.5rem 1rem;
+}
+
+.chapter {
+  min-width: 2rem;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background-color: var(--color-surface);
+  color: var(--color-text-soft);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.chapter:hover {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+.chapter.has-note {
+  background-color: var(--color-accent-soft);
+  border-color: transparent;
+  color: var(--color-accent-strong);
+  font-weight: 600;
+}
+
+/* Rendered Markdown */
+
+.markdown {
+  margin-top: 1.25rem;
+}
+
+.markdown p {
+  margin-bottom: 1rem;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.markdown h1 {
+  font-size: 1.4rem;
+}
+
+.markdown h2 {
+  font-size: 1.25rem;
+}
+
+.markdown h3 {
+  font-size: 1.1rem;
+}
+
+.markdown ul,
+.markdown ol {
+  margin: 0 0 1rem 1.5rem;
+}
+
+.markdown li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown blockquote {
+  margin: 0 0 1rem;
+  padding: 0.5rem 1.25rem;
+  border-left: 3px solid var(--color-accent);
+  background-color: var(--color-accent-soft);
+  color: var(--color-text-soft);
+}
+
+.markdown blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown code {
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-small);
+  background-color: var(--color-accent-soft);
+  font-family: ui-monospace, "Cascadia Mono", monospace;
+  font-size: 0.85em;
+}
+
+.markdown pre {
+  margin: 0 0 1rem;
+  padding: 1rem;
+  border-radius: var(--radius-medium);
+  background-color: var(--color-accent-soft);
+  overflow-x: auto;
+}
+
+.markdown pre code {
+  padding: 0;
+  background: none;
+  line-height: 1.6;
+}
+
+.markdown a {
+  color: var(--color-accent-strong);
+}
+
+.wiki-link.unresolved {
+  color: var(--color-text-soft);
+  border-bottom: 1px dashed var(--color-border);
+  text-decoration: none;
+  cursor: default;
+}
+
+/* Backlinks */
+
+.backlinks {
+  margin-top: 2.5rem;
+}
+
 @media (max-width: 600px) {
   .site-header-inner {
     flex-direction: column;
