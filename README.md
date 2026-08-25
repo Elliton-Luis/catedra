@@ -12,6 +12,8 @@ O Cátedra funciona inteiramente no navegador: sem backend, sem banco de dados, 
 - Seção Apologética: criação de notas livres (sem categorias impostas), edição de título e conteúdo com salvamento automático no armazenamento local do navegador, e exclusão com confirmação
 - Editor de Markdown próprio e seguro: títulos, negrito, itálico, listas, citações, links, código e parágrafos, com alternância entre os modos "Escrever" e "Ler"
 - Links internos entre notas no formato `[[Título]]` ou `[[Romanos 3]]`, além de backlinks ("Referenciada por") derivados do conteúdo existente
+- Busca global simples (texto parcial, sem diferenciar maiúsculas) sobre livros, estudos bíblicos e notas, com resultados atualizados enquanto o usuário digita
+- Favoritos persistentes para livros, estudos bíblicos e notas, exibidos em grupos na seção Favoritos
 
 ## Estrutura do projeto
 
@@ -27,11 +29,14 @@ catedra/
 │   ├── notes-store.js  # Persistência das notas (apologética e escrituras)
 │   ├── markdown.js # Renderizador Markdown mínimo e seguro
 │   ├── links.js    # Resolução de [[links]] e backlinks
+│   ├── favorites.js    # Favoritos persistentes (referências estáveis)
 │   ├── data/
 │   │   └── bible-books.js  # Os 73 livros da Bíblia Católica (dados estáticos)
 │   └── views/
 │       ├── scriptures.js    # Visão da seção Escrituras e notas de capítulo
 │       ├── apologetics.js   # Visão da seção Apologética
+│       ├── search.js        # Busca global
+│       ├── favorites.js     # Seção Favoritos
 │       └── note-editor.js   # Editor de notas em Markdown (escrita/leitura)
 ├── assets/         # Arquivos estáticos
 └── README.md
