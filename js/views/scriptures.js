@@ -1,17 +1,18 @@
 import { bibleBooks } from "../data/bible-books.js";
 
+// User-facing labels in Portuguese; keys are internal English identifiers.
 const categoryLabels = {
-  pentateuch: "Pentateuch",
-  historical: "Historical Books",
-  wisdom: "Wisdom",
-  poetry: "Poetry",
-  prophetic: "Prophets",
-  gospel: "Gospels",
-  acts: "Acts of the Apostles",
-  pauline: "Pauline Letters",
-  catholic_epistle: "Catholic Letters",
-  apocalyptic: "Apocalypse",
-  deuterocanonical: "Deuterocanonical",
+  pentateuch: "Pentateuco",
+  historical: "Livros Históricos",
+  wisdom: "Sapienciais",
+  poetry: "Poéticos",
+  prophetic: "Profetas",
+  gospel: "Evangelhos",
+  acts: "Atos dos Apóstolos",
+  pauline: "Cartas Paulinas",
+  catholic_epistle: "Cartas Católicas",
+  apocalyptic: "Apocalíptico",
+  deuterocanonical: "Deuterocanônico",
 };
 
 // Group books by consecutive runs of their primary category,
@@ -37,14 +38,14 @@ function renderBook(book) {
       <details class="list-item">
         <summary>
           <span>${book.displayName}</span>
-          <span class="metadata">${book.abbreviation} · ${book.chapters} chapters</span>
+          <span class="metadata">${book.abbreviation} · ${book.chapters} capítulos</span>
         </summary>
         <dl class="book-details">
-          <dt>Categories</dt><dd>${categories}</dd>
-          <dt>Author</dt><dd>${book.author}</dd>
-          <dt>Date</dt><dd>${book.date}</dd>
+          <dt>Categorias</dt><dd>${categories}</dd>
+          <dt>Autor</dt><dd>${book.author}</dd>
+          <dt>Data</dt><dd>${book.date}</dd>
         </dl>
-        ${book.deuterocanonical ? '<span class="tag">Deuterocanonical</span>' : ""}
+        ${book.deuterocanonical ? '<span class="tag">Deuterocanônico</span>' : ""}
         ${book.deuterocanonicalSections ? `<p class="metadata">${book.deuterocanonicalSections}</p>` : ""}
       </details>
     </li>
@@ -69,15 +70,15 @@ export function mount(container) {
   const newTestament = bibleBooks.filter((b) => b.testament === "new");
   container.innerHTML = `
     <div class="section-header">
-      <h1>Scriptures</h1>
-      <p class="metadata">${bibleBooks.length} books of the Catholic Bible.</p>
+      <h1>Escrituras</h1>
+      <p class="metadata">${bibleBooks.length} livros da Bíblia Católica.</p>
     </div>
     <section aria-labelledby="ot-heading">
-      <h2 id="ot-heading">Old Testament</h2>
+      <h2 id="ot-heading">Antigo Testamento</h2>
       ${renderGroups(oldTestament)}
     </section>
     <section aria-labelledby="nt-heading">
-      <h2 id="nt-heading">New Testament</h2>
+      <h2 id="nt-heading">Novo Testamento</h2>
       ${renderGroups(newTestament)}
     </section>
   `;
