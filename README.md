@@ -9,6 +9,7 @@ Study Notebook runs entirely in the browser: no backend, no database, no account
 - Minimal static interface mounted with vanilla JavaScript
 - Calm, readable visual foundation
 - Scriptures section: browse the 73 books of the Catholic Bible in canonical order, with category, chapter count, traditional authorship and approximate date
+- Apologetics section: create free-form notes (no imposed categories), edit title and content with automatic saving to browser local storage, and delete with confirmation
 
 ## Project structure
 
@@ -18,9 +19,12 @@ study-notebook/
 ├── css/
 │   └── style.css   # Base styles and design tokens
 ├── js/
-│   ├── main.js     # Application entry point (shell, navigation, views)
-│   └── data/
-│       └── bible-books.js  # The 73 Catholic Bible books (static data)
+│   ├── main.js     # Application entry point (shell, navigation, routing)
+│   ├── data/
+│   │   └── bible-books.js  # The 73 Catholic Bible books (static data)
+│   └── views/
+│       ├── scriptures.js    # Scriptures section view
+│       └── apologetics.js   # Apologetics notes (storage and views)
 ├── assets/         # Static assets
 └── README.md
 ```
