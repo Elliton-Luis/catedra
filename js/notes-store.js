@@ -26,16 +26,19 @@ export function getApologeticsNote(id) {
   return loadApologeticsNotes().find((note) => note.id === id);
 }
 
-export function createApologeticsNote() {
-  const note = { id: crypto.randomUUID(), title: "", content: APOLOGETICS_TEMPLATE };
-  saveJson(APOLOGETICS_NOTES_KEY, [...loadApologeticsNotes(), note]);
-  return note;
+export function getApologeticsTemplate() {
+  return APOLOGETICS_TEMPLATE;
 }
 
+// Creates the note if it does not exist yet (drafts are only
+// persisted on first edit, so abandoned drafts leave no clutter).
 export function updateApologeticsNote(id, changes) {
   const notes = loadApologeticsNotes();
-  const note = notes.find((n) => n.id === id);
-  if (!note) return;
+  let note = notes.find((n) => n.id === id);
+  if (!note) {
+    note = { id, title: "", content: APOLOGETICS_TEMPLATE };
+    notes.push(note);
+  }
   Object.assign(note, changes);
   saveJson(APOLOGETICS_NOTES_KEY, notes);
 }

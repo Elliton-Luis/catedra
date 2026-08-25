@@ -3,9 +3,9 @@ import { downloadMarkdown, printNote, sanitizeFilename } from "../note-export.js
 import { favoriteButtonHtml, removeFavorite, wireFavoriteButtons } from "../favorites.js";
 import { getBacklinks, renderBacklinks, resolveWikiLink } from "../links.js";
 import {
-  createApologeticsNote,
   deleteApologeticsNote,
   getApologeticsNote,
+  getApologeticsTemplate,
   loadApologeticsNotes,
   updateApologeticsNote,
 } from "../notes-store.js";
@@ -43,28 +43,19 @@ export function mountList(container) {
   `;
 
   container.querySelector("#new-note").addEventListener("click", () => {
-    location.hash = `#apologetics/${encodeURIComponent(createApologeticsNote().id)}`;
+    // Drafts are only persisted on first edit.
+    location.hash = `#apologetics/${crypto.randomUUID()}`;
   });
 }
 
 export function mountEditor(container, id) {
   const note = getApologeticsNote(id);
 
-  if (!note) {
-    container.innerHTML = `
-      <a class="back-link metadata" href="#apologetics">&larr; Apologética</a>
-      <section class="empty-state">
-        <p>Esta nota não existe mais.</p>
-      </section>
-    `;
-    return;
-  }
-
   noteEditor.mount(container, {
     backHtml: `<a class="back-link metadata" href="#apologetics">&larr; Apologética</a>`,
     getTitle: () => getApologeticsNote(id)?.title ?? "",
     onTitleChange: (value) => updateApologeticsNote(id, { title: value }),
-    getContent: () => getApologeticsNote(id)?.content ?? "",
+    getContent: () => getApologeticsNote(id)?.content ?? getApologeticsTemplate(),
     onContentChange: (value) => updateApologeticsNote(id, { content: value }),
     resolveWiki: resolveWikiLink,
     footerHtml: `
@@ -76,7 +67,7 @@ export function mountEditor(container, id) {
       </div>
     `,
     belowHtml: renderBacklinks(
-      getBacklinks([note.title], `#apologetics/${encodeURIComponent(id)}`)
+      getBacklinks([note?.title].filter(Boolean), `#apologetics/${encodeURIComponent(id)}`)
     ),
     onMount: (element) => {
       wireFavoriteButtons(element);

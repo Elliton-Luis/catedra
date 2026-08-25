@@ -36,7 +36,7 @@ function extractWikiNames(content) {
 
 // Backlinks are always derived from existing notes, never stored.
 export function getBacklinks(targetNames, selfHref) {
-  const keys = targetNames.map(normalize);
+  const keys = targetNames.filter(Boolean).map(normalize);
   const backlinks = [];
 
   for (const note of loadApologeticsNotes()) {

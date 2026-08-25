@@ -1,3 +1,4 @@
+import { bibleBooks } from "./data/bible-books.js";
 import {
   loadApologeticsNotes,
   loadScriptureNotes,
@@ -26,13 +27,11 @@ function isValidApologeticsNote(note) {
 }
 
 function isValidScriptureNote(note) {
-  return (
-    Boolean(note) &&
-    typeof note.bookId === "string" &&
-    Number.isInteger(note.chapter) &&
-    note.chapter >= 1 &&
-    typeof note.content === "string"
-  );
+  if (!note || typeof note.bookId !== "string" || typeof note.content !== "string") {
+    return false;
+  }
+  const book = bibleBooks.find((book) => book.id === note.bookId);
+  return Number.isInteger(note.chapter) && note.chapter >= 1 && !!book && note.chapter <= book.chapters;
 }
 
 // Parses and minimally validates a backup file.

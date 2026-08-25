@@ -33,6 +33,7 @@ catedra/
 │   ├── links.js    # Resolução de [[links]] e backlinks
 │   ├── favorites.js    # Favoritos persistentes (referências estáveis)
 │   ├── backup.js   # Exportação/importação de dados (JSON versionado)
+│   ├── note-export.js  # Exportação individual (.md e PDF via impressão)
 │   ├── data/
 │   │   └── bible-books.js  # Os 73 livros da Bíblia Católica (dados estáticos)
 │   └── views/
