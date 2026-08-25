@@ -1,5 +1,6 @@
 import { bibleBooks } from "../data/bible-books.js";
 import { escapeHtml } from "../dom.js";
+import { favoriteButtonHtml, removeFavorite, wireFavoriteButtons } from "../favorites.js";
 import { getBacklinks, renderBacklinks, resolveWikiLink } from "../links.js";
 import {
   deleteScriptureNote,
@@ -48,6 +49,7 @@ function renderBook(book, notedByBook) {
           <span>${book.displayName}</span>
           <span class="metadata">${book.abbreviation} · ${book.chapters} capítulos</span>
         </summary>
+        ${favoriteButtonHtml(`book:${book.id}`)}
         <dl class="book-details">
           <dt>Categorias</dt><dd>${categories}</dd>
           <dt>Autor</dt><dd>${book.author}</dd>
@@ -114,6 +116,7 @@ export function mount(container) {
       ${renderGroups(newTestament, notedByBook)}
     </section>
   `;
+  wireFavoriteButtons(container);
 }
 
 export function mountChapterNote(container, bookId, chapter) {
@@ -139,14 +142,21 @@ export function mountChapterNote(container, bookId, chapter) {
     getContent: () => getScriptureNote(bookId, chapter)?.content ?? "",
     onContentChange: (value) => upsertScriptureNote(bookId, chapter, value),
     resolveWiki: resolveWikiLink,
-    footerHtml: `<button id="delete-note" class="button secondary" type="button">Excluir nota</button>`,
+    footerHtml: `
+      <div class="editor-buttons">
+        ${favoriteButtonHtml(`scripture:${bookId}/${chapter}`)}
+        <button id="delete-note" class="button secondary" type="button">Excluir nota</button>
+      </div>
+    `,
     belowHtml: renderBacklinks(
       getBacklinks([label], `#scriptures/${bookId}/${chapter}`)
     ),
     onMount: (element) => {
+      wireFavoriteButtons(element);
       element.querySelector("#delete-note")?.addEventListener("click", () => {
         if (!confirm(`Excluir a nota de "${label}"? Esta ação não pode ser desfeita.`)) return;
         deleteScriptureNote(bookId, chapter);
+        removeFavorite(`scripture:${bookId}/${chapter}`);
         location.hash = "#scriptures";
       });
     },

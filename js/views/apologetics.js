@@ -1,4 +1,5 @@
 import { escapeHtml } from "../dom.js";
+import { favoriteButtonHtml, removeFavorite, wireFavoriteButtons } from "../favorites.js";
 import { getBacklinks, renderBacklinks, resolveWikiLink } from "../links.js";
 import {
   createApologeticsNote,
@@ -65,17 +66,24 @@ export function mountEditor(container, id) {
     getContent: () => getApologeticsNote(id)?.content ?? "",
     onContentChange: (value) => updateApologeticsNote(id, { content: value }),
     resolveWiki: resolveWikiLink,
-    footerHtml: `<button id="delete-note" class="button secondary" type="button">Excluir nota</button>`,
+    footerHtml: `
+      <div class="editor-buttons">
+        ${favoriteButtonHtml(`apologetics:${id}`)}
+        <button id="delete-note" class="button secondary" type="button">Excluir nota</button>
+      </div>
+    `,
     belowHtml: renderBacklinks(
       getBacklinks([note.title], `#apologetics/${encodeURIComponent(id)}`)
     ),
     onMount: (element) => {
+      wireFavoriteButtons(element);
       element.querySelector("#delete-note")?.addEventListener("click", () => {
         const current = getApologeticsNote(id);
         if (!confirm(`Excluir "${current?.title || "Sem título"}"? Esta ação não pode ser desfeita.`)) {
           return;
         }
         deleteApologeticsNote(id);
+        removeFavorite(`apologetics:${id}`);
         location.hash = "#apologetics";
       });
     },
