@@ -143,6 +143,20 @@ export function mount(container) {
   wireFavoriteButtons(container);
 }
 
+// Starter structure shown for chapters that have no note yet.
+// Not persisted until the user actually writes something;
+// the suggested relation points to the nearest chapter.
+function buildStudyTemplate(book, chapter) {
+  const lines = ["# Ensino geral", "", "Paulo demonstra...", "", "## Relações", ""];
+  if (chapter < book.chapters) {
+    lines.push(`Este capítulo se relaciona com [[${book.displayName} ${chapter + 1}]].`, "");
+  } else if (chapter > 1) {
+    lines.push(`Este capítulo se relaciona com [[${book.displayName} ${chapter - 1}]].`, "");
+  }
+  lines.push("## Extras", "");
+  return lines.join("\n");
+}
+
 export function mountChapterNote(container, bookId, chapter) {
   const backHtml = `<a class="back-link metadata" href="#scriptures">&larr; Escrituras</a>`;
   const book = bibleBooks.find((b) => b.id === bookId);
@@ -158,15 +172,16 @@ export function mountChapterNote(container, bookId, chapter) {
   }
 
   const label = `${book.displayName} ${chapter}`;
+  const getNote = () => getScriptureNote(bookId, chapter);
 
   noteEditor.mount(container, {
     backHtml,
     heading: label,
-    getTitle: () => getScriptureNote(bookId, chapter)?.title ?? "",
+    getTitle: () => getNote()?.title ?? "",
     onTitleChange: (value) => upsertScriptureNote(bookId, chapter, { title: value }),
     titlePlaceholder: "Título do estudo (opcional)",
     placeholder: `Escreva seu estudo sobre ${label} em Markdown`,
-    getContent: () => getScriptureNote(bookId, chapter)?.content ?? "",
+    getContent: () => getNote()?.content ?? buildStudyTemplate(book, chapter),
     onContentChange: (value) => upsertScriptureNote(bookId, chapter, { content: value }),
     resolveWiki: resolveWikiLink,
     footerHtml: `

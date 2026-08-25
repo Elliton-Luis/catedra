@@ -3,6 +3,19 @@ import { loadJson, saveJson } from "./store.js";
 const APOLOGETICS_NOTES_KEY = "study-notebook.apologetics.notes";
 const SCRIPTURE_NOTES_KEY = "study-notebook.scriptures.notes";
 
+// Starter structure for new apologetics notes.
+// The user is free to change or discard it entirely.
+const APOLOGETICS_TEMPLATE = [
+  "# Tese",
+  "",
+  "## Argumentos",
+  "",
+  "## Relações",
+  "",
+  "## Extras",
+  "",
+].join("\n");
+
 // Apologetics notes: free-titled notes with their own stable ids.
 
 export function loadApologeticsNotes() {
@@ -14,7 +27,7 @@ export function getApologeticsNote(id) {
 }
 
 export function createApologeticsNote() {
-  const note = { id: crypto.randomUUID(), title: "", content: "" };
+  const note = { id: crypto.randomUUID(), title: "", content: APOLOGETICS_TEMPLATE };
   saveJson(APOLOGETICS_NOTES_KEY, [...loadApologeticsNotes(), note]);
   return note;
 }
