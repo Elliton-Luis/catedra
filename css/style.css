@@ -491,6 +491,41 @@ p {
   margin-top: 2.5rem;
 }
 
+/* Favorites */
+
+.editor-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.favorite-button {
+  padding: 0.35rem 0.6rem;
+  border: none;
+  border-radius: var(--radius-small);
+  background-color: transparent;
+  color: var(--color-text-soft);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.favorite-button:hover {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+.favorite-button.active {
+  color: var(--color-accent-strong);
+}
+
+/* Search */
+
+#search-input {
+  max-width: 28rem;
+  margin-bottom: 1.5rem;
+}
+
 @media (max-width: 600px) {
   .site-header-inner {
     flex-direction: column;
