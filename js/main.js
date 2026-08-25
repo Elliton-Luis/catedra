@@ -1,5 +1,7 @@
 import * as scriptures from "./views/scriptures.js";
 import * as apologetics from "./views/apologetics.js";
+import * as favorites from "./views/favorites.js";
+import * as search from "./views/search.js";
 
 const app = document.querySelector("#app");
 
@@ -13,6 +15,7 @@ function renderShell(contentHtml) {
           <ul class="site-nav">
             <li><a href="#scriptures">Escrituras</a></li>
             <li><a href="#apologetics">Apologética</a></li>
+            <li><a href="#search">Busca</a></li>
             <li><a href="#favorites">Favoritos</a></li>
             <li><a href="#settings">Ajustes &amp; Dados</a></li>
           </ul>
@@ -63,7 +66,9 @@ function resolveRoute() {
   } else if (hash.startsWith("#apologetics/")) {
     apologetics.mountEditor(container, decodeURIComponent(hash.slice("#apologetics/".length)));
   } else if (hash === "#favorites") {
-    renderSectionPlaceholder(container, "Favoritos");
+    favorites.mount(container);
+  } else if (hash === "#search") {
+    search.mount(container);
   } else if (hash === "#settings") {
     renderSectionPlaceholder(container, "Ajustes & Dados");
   } else {
