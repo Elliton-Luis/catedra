@@ -12,7 +12,10 @@ function safeUrl(url) {
 
 const INLINE_CODE_PLACEHOLDER = "\x00";
 
-function renderInline(text, resolveWiki) {
+function renderInline(rawText, resolveWiki) {
+  // Escape first so user content can never produce markup.
+  const text = escapeHtml(rawText);
+
   const codeSpans = [];
   let result = text.replace(/`([^`]+)`/g, (_, code) => {
     codeSpans.push(`<code>${code}</code>`);
@@ -60,7 +63,7 @@ function renderBlocks(source, resolveWiki) {
         i++;
       }
       i++; // skip closing fence
-      html.push(`<pre><code>${buffer.join("\n")}</code></pre>`);
+      html.push(`<pre><code>${escapeHtml(buffer.join("\n"))}</code></pre>`);
       continue;
     }
 
@@ -121,5 +124,5 @@ function renderBlocks(source, resolveWiki) {
 }
 
 export function renderMarkdown(source, resolveWiki) {
-  return renderBlocks(escapeHtml(source), resolveWiki);
+  return renderBlocks(String(source ?? ""), resolveWiki);
 }
