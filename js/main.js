@@ -1,20 +1,7 @@
-import { bibleBooks } from "./data/bible-books.js";
+import * as scriptures from "./views/scriptures.js";
+import * as apologetics from "./views/apologetics.js";
 
 const app = document.querySelector("#app");
-
-const categoryLabels = {
-  pentateuch: "Pentateuch",
-  historical: "Historical Books",
-  wisdom: "Wisdom",
-  poetry: "Poetry",
-  prophetic: "Prophets",
-  gospel: "Gospels",
-  acts: "Acts of the Apostles",
-  pauline: "Pauline Letters",
-  catholic_epistle: "Catholic Letters",
-  apocalyptic: "Apocalypse",
-  deuterocanonical: "Deuterocanonical",
-};
 
 function renderShell(contentHtml) {
   app.innerHTML = `
@@ -38,8 +25,8 @@ function renderShell(contentHtml) {
   `;
 }
 
-function renderWelcome() {
-  return `
+function renderWelcome(container) {
+  container.innerHTML = `
     <div class="section-header">
       <h1>Study Notebook</h1>
       <p class="metadata">A quiet place for Scripture study and apologetics.</p>
@@ -51,81 +38,8 @@ function renderWelcome() {
   `;
 }
 
-// Group books by consecutive runs of their primary category,
-// which follows the canonical ordering.
-function groupBooks(books) {
-  const groups = [];
-  for (const book of books) {
-    const label = categoryLabels[book.categories[0]];
-    const last = groups[groups.length - 1];
-    if (last && last.label === label) {
-      last.books.push(book);
-    } else {
-      groups.push({ label, books: [book] });
-    }
-  }
-  return groups;
-}
-
-function renderBook(book) {
-  const categories = book.categories.map((c) => categoryLabels[c]).join(", ");
-  const deuteroTag = book.deuterocanonical ? '<span class="tag">Deuterocanonical</span>' : "";
-  return `
-    <details class="list-item">
-      <summary>
-        <span>${book.displayName}</span>
-        <span class="metadata">${book.abbreviation} · ${book.chapters} chapters</span>
-      </summary>
-      <dl class="book-details">
-        <dt>Categories</dt><dd>${categories}</dd>
-        <dt>Author</dt><dd>${book.author}</dd>
-        <dt>Date</dt><dd>${book.date}</dd>
-      </dl>
-      ${deuteroTag}
-      ${book.deuterocanonicalSections ? `<p class="metadata">${book.deuterocanonicalSections}</p>` : ""}
-    </details>
-  `;
-}
-
-function renderScriptures() {
-  const oldTestament = bibleBooks.filter((b) => b.testament === "old");
-  const newTestament = bibleBooks.filter((b) => b.testament === "new");
-  return `
-    <div class="section-header">
-      <h1>Scriptures</h1>
-      <p class="metadata">${bibleBooks.length} books of the Catholic Bible.</p>
-    </div>
-    <section aria-labelledby="ot-heading">
-      <h2 id="ot-heading">Old Testament</h2>
-      ${groupBooks(oldTestament)
-        .map(
-          (group) => `
-        <h3 class="category-title">${group.label}</h3>
-        <ul class="book-list">
-          ${group.books.map(renderBook).join("")}
-        </ul>
-      `
-        )
-        .join("")}
-    </section>
-    <section aria-labelledby="nt-heading">
-      <h2 id="nt-heading">New Testament</h2>
-      ${groupBooks(newTestament)
-        .map(
-          (group) => `
-        <h3 class="category-title">${group.label}</h3>
-        <ul class="book-list">
-          ${group.books.map(renderBook).join("")}
-        </ul>
-      `
-        )
-        .join("")}
-    </section>
-  `;
-}
-
-function renderSectionPlaceholder(name) {
-  return `
+function renderSectionPlaceholder(container, name) {
+  container.innerHTML = `
     <div class="section-header">
       <h1>${name}</h1>
     </div>
@@ -136,27 +50,29 @@ function renderSectionPlaceholder(name) {
   `;
 }
 
-function currentView() {
-  switch (location.hash) {
-    case "#scriptures":
-      return renderScriptures();
-    case "#apologetics":
-      return renderSectionPlaceholder("Apologetics");
-    case "#favorites":
-      return renderSectionPlaceholder("Favorites");
-    case "#settings":
-      return renderSectionPlaceholder("Settings & Data");
-    default:
-      return renderWelcome();
+function resolveRoute() {
+  const container = document.querySelector("#content");
+  const hash = location.hash;
+  if (hash === "#scriptures") {
+    scriptures.mount(container);
+  } else if (hash === "#apologetics") {
+    apologetics.mountList(container);
+  } else if (hash.startsWith("#apologetics/")) {
+    apologetics.mountEditor(container, decodeURIComponent(hash.slice("#apologetics/".length)));
+  } else if (hash === "#favorites") {
+    renderSectionPlaceholder(container, "Favorites");
+  } else if (hash === "#settings") {
+    renderSectionPlaceholder(container, "Settings & Data");
+  } else {
+    renderWelcome(container);
   }
 }
 
 function render() {
-  renderShell(currentView());
+  renderShell("");
+  resolveRoute();
 }
 
-window.addEventListener("hashchange", () => {
-  document.querySelector("#content").innerHTML = currentView();
-});
+window.addEventListener("hashchange", render);
 
 render();
