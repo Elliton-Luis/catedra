@@ -1,13 +1,13 @@
-/* Design tokens: warm parchment palette, serif for reading, sans for UI. */
+/* Design tokens: golden parchment palette, serif for reading, sans for UI. */
 :root {
-  --color-bg: #f8f4ea;
-  --color-surface: #fefbf4;
-  --color-text: #322e24;
-  --color-text-soft: #7d7666;
-  --color-accent: #60563f;
-  --color-accent-strong: #4c4433;
-  --color-accent-soft: #efe9d8;
-  --color-border: #e3dcc9;
+  --color-bg: #f6efdc;
+  --color-surface: #fbf7ea;
+  --color-text: #35301d;
+  --color-text-soft: #857b5e;
+  --color-accent: #6a5c35;
+  --color-accent-strong: #54492a;
+  --color-accent-soft: #ede4c8;
+  --color-border: #e2d8b8;
   --font-serif: Georgia, "Times New Roman", serif;
   --font-sans: system-ui, -apple-system, sans-serif;
   --radius-small: 4px;
@@ -65,8 +65,8 @@ p {
   top: 1rem;
 }
 
-/* Application shell: brand above navigation on small screens,
-   a single quiet row on desktop. */
+/* Application shell: brand + hamburger on small screens,
+   brand and inline navigation sharing one quiet row on desktop. */
 
 .site-header {
   background-color: var(--color-surface);
@@ -74,42 +74,81 @@ p {
 }
 
 .site-header-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
   max-width: 56rem;
   margin: 0 auto;
-  padding: 0.875rem 1rem 0.25rem;
+  padding: 0.75rem 1rem;
+}
+
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .brand {
   font-family: var(--font-serif);
-  font-size: 1.55rem;
+  font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--color-text);
   text-decoration: none;
 }
 
-.site-nav ul {
-  display: flex;
-  gap: 0.125rem;
-  list-style: none;
-  overflow-x: auto;
-  scrollbar-width: none;
+.menu-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 0.6rem;
+  border: none;
+  border-radius: var(--radius-small);
+  background-color: transparent;
+  cursor: pointer;
 }
 
-.site-nav ul::-webkit-scrollbar {
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--color-text-soft);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.site-header.menu-open .menu-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.site-header.menu-open .menu-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.site-header.menu-open .menu-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.site-nav {
   display: none;
+}
+
+.site-header.menu-open .site-nav {
+  display: block;
+}
+
+.site-nav ul {
+  list-style: none;
+  padding-bottom: 0.5rem;
+}
+
+.site-nav li + li {
+  border-top: 1px solid var(--color-accent-soft);
 }
 
 .site-nav a {
   display: block;
-  padding: 0.5rem 0.65rem;
-  white-space: nowrap;
-  border-radius: var(--radius-small);
+  padding: 0.7rem 0.5rem;
   font-family: var(--font-sans);
-  font-size: 0.92rem;
+  font-size: 1rem;
   color: var(--color-text-soft);
   text-decoration: none;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -548,23 +587,44 @@ p {
   cursor: pointer;
 }
 
-/* Desktop: use the extra space, keep the same structure. */
+/* Desktop: navigation inline beside the brand, same structure. */
 
 @media (min-width: 700px) {
   .site-header-inner {
-    flex-direction: row;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
     padding: 1rem 1.5rem;
   }
 
-  .brand {
-    font-size: 1.85rem;
+  .menu-toggle {
+    display: none;
+  }
+
+  .site-nav,
+  .site-header.menu-open .site-nav {
+    display: block;
+  }
+
+  .site-nav ul {
+    display: flex;
+    gap: 0.25rem;
+    padding-bottom: 0;
+  }
+
+  .site-nav li + li {
+    border-top: none;
   }
 
   .site-nav a {
-    padding: 0.4rem 0.75rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius-small);
+    font-size: 0.95rem;
+  }
+
+  .brand {
+    font-size: 2rem;
   }
 
   .page {

@@ -12,9 +12,23 @@ function renderShell() {
     <a class="skip-link" href="#content">Pular para o conteúdo</a>
     <header class="site-header">
       <div class="site-header-inner">
-        <a class="brand" href="#">Cátedra</a>
-        <nav aria-label="Navegação principal">
-          <ul class="site-nav">
+        <div class="brand-row">
+          <a class="brand" href="#">Cátedra</a>
+          <button
+            id="menu-toggle"
+            class="menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            aria-label="Abrir menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        <nav id="site-nav" class="site-nav" aria-label="Navegação principal">
+          <ul>
             <li><a href="#scriptures">Escrituras</a></li>
             <li><a href="#apologetics">Apologética</a></li>
             <li><a href="#search">Busca</a></li>
@@ -32,6 +46,14 @@ function renderShell() {
     event.preventDefault();
     document.querySelector("#content").focus();
   });
+
+  const header = app.querySelector(".site-header");
+  const menuToggle = app.querySelector("#menu-toggle");
+  menuToggle.addEventListener("click", () => {
+    const open = header.classList.toggle("menu-open");
+    menuToggle.setAttribute("aria-expanded", String(open));
+    menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+  });
 }
 
 // The shell is rendered once; only the content area changes per route.
@@ -44,6 +66,14 @@ function updateNavCurrent(hash) {
       link.removeAttribute("aria-current");
     }
   }
+}
+
+// The mobile menu starts closed on every navigation.
+function closeMenu() {
+  const header = app.querySelector(".site-header");
+  const menuToggle = app.querySelector("#menu-toggle");
+  header.classList.remove("menu-open");
+  menuToggle.setAttribute("aria-expanded", "false");
 }
 
 function renderWelcome(container) {
@@ -63,6 +93,7 @@ function resolveRoute() {
   const container = document.querySelector("#content");
   const hash = location.hash;
   updateNavCurrent(hash);
+  closeMenu();
 
   if (hash === "#scriptures") {
     scriptures.mount(container);
