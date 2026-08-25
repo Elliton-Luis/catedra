@@ -5,7 +5,7 @@ import { loadApologeticsNotes, getScriptureNote } from "../notes-store.js";
 
 // Resolve each stored favorite reference to a displayable entry.
 // Stale references (deleted notes, invalid chapters) are pruned.
-function collectFavorites() {
+export function collectFavorites() {
   const books = [];
   const studies = [];
   const notes = [];

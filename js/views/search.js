@@ -13,7 +13,7 @@ function normalize(value) {
 }
 
 // Direct scan over the local data; indexing is unnecessary at this scale.
-function collectResults(query) {
+export function collectResults(query) {
   const q = normalize(query.trim());
   if (!q) return [];
   const results = [];
