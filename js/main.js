@@ -60,7 +60,8 @@ function resolveRoute() {
   if (hash === "#scriptures") {
     scriptures.mount(container);
   } else if (hash.startsWith("#scriptures/")) {
-    const [, , bookId, chapter] = hash.split("/");
+    // "#scriptures/<bookId>/<chapter>" -> ["#scriptures", "<bookId>", "<chapter>"]
+    const [, bookId, chapter] = hash.split("/");
     scriptures.mountChapterNote(container, bookId, Number(chapter));
   } else if (hash === "#apologetics") {
     apologetics.mountList(container);
