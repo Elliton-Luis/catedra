@@ -2,6 +2,7 @@ import * as scriptures from "./views/scriptures.js";
 import * as apologetics from "./views/apologetics.js";
 import * as favorites from "./views/favorites.js";
 import * as search from "./views/search.js";
+import * as settings from "./views/settings.js";
 
 const app = document.querySelector("#app");
 
@@ -70,7 +71,7 @@ function resolveRoute() {
   } else if (hash === "#search") {
     search.mount(container);
   } else if (hash === "#settings") {
-    renderSectionPlaceholder(container, "Ajustes & Dados");
+    settings.mount(container);
   } else {
     renderWelcome(container);
   }
