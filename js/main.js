@@ -55,6 +55,9 @@ function resolveRoute() {
   const hash = location.hash;
   if (hash === "#scriptures") {
     scriptures.mount(container);
+  } else if (hash.startsWith("#scriptures/")) {
+    const [, , bookId, chapter] = hash.split("/");
+    scriptures.mountChapterNote(container, bookId, Number(chapter));
   } else if (hash === "#apologetics") {
     apologetics.mountList(container);
   } else if (hash.startsWith("#apologetics/")) {
