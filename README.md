@@ -15,6 +15,7 @@ O Cátedra funciona inteiramente no navegador: sem backend, sem banco de dados, 
 - Busca global simples (texto parcial, sem diferenciar maiúsculas) sobre livros, estudos bíblicos e notas, com resultados atualizados enquanto o usuário digita
 - Favoritos persistentes para livros, estudos bíblicos e notas, exibidos em grupos na seção Favoritos
 - Portabilidade de dados: exportação e importação de arquivo JSON versionado (estudos bíblicos, notas e favoritos) em Ajustes & Dados, permitindo migrar entre navegadores ou dispositivos
+- Exportação individual de notas em `.md` (Markdown original) ou PDF (via diálogo de impressão do navegador, com tipografia e margens adequadas para leitura e impressão)
 
 ## Estrutura do projeto
 
