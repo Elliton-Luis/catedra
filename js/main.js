@@ -1,3 +1,4 @@
+import * as home from "./views/home.js";
 import * as scriptures from "./views/scriptures.js";
 import * as apologetics from "./views/apologetics.js";
 import * as favorites from "./views/favorites.js";
@@ -76,19 +77,6 @@ function closeMenu() {
   menuToggle.setAttribute("aria-expanded", "false");
 }
 
-function renderWelcome(container) {
-  container.innerHTML = `
-    <div class="section-header">
-      <h1>Cátedra</h1>
-      <p class="metadata">Um lugar tranquilo para o estudo da Escritura e da apologética.</p>
-    </div>
-    <section class="empty-state" aria-label="Nenhum conteúdo ainda">
-      <p>Nada por aqui ainda.</p>
-      <p class="metadata">Seus estudos aparecerão nas seções.</p>
-    </section>
-  `;
-}
-
 function resolveRoute() {
   const container = document.querySelector("#content");
   const hash = location.hash;
@@ -112,7 +100,7 @@ function resolveRoute() {
   } else if (hash === "#settings") {
     settings.mount(container);
   } else {
-    renderWelcome(container);
+    home.mount(container);
   }
 }
 

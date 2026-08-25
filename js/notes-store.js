@@ -40,6 +40,7 @@ export function updateApologeticsNote(id, changes) {
     notes.push(note);
   }
   Object.assign(note, changes);
+  note.updatedAt = new Date().toISOString();
   saveJson(APOLOGETICS_NOTES_KEY, notes);
 }
 
@@ -92,6 +93,8 @@ export function upsertScriptureNote(bookId, chapter, changes) {
       ...changes,
     });
   }
+  const updated = notes.find((note) => note.bookId === bookId && note.chapter === chapter);
+  updated.updatedAt = new Date().toISOString();
   saveJson(SCRIPTURE_NOTES_KEY, notes);
 }
 
