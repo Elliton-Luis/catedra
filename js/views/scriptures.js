@@ -1,6 +1,7 @@
 import { bibleBooks } from "../data/bible-books.js";
 import { escapeHtml } from "../dom.js";
 import { favoriteButtonHtml, removeFavorite, wireFavoriteButtons } from "../favorites.js";
+import { downloadMarkdown, printNote } from "../note-export.js";
 import { getBacklinks, renderBacklinks, resolveWikiLink } from "../links.js";
 import {
   deleteScriptureNote,
@@ -187,6 +188,8 @@ export function mountChapterNote(container, bookId, chapter) {
     footerHtml: `
       <div class="editor-buttons">
         ${favoriteButtonHtml(`scripture:${bookId}/${chapter}`)}
+        <button id="export-md" class="text-button" type="button">Exportar .md</button>
+        <button id="export-pdf" class="text-button" type="button">Exportar PDF</button>
         <button id="delete-note" class="button secondary" type="button">Excluir nota</button>
       </div>
     `,
@@ -195,6 +198,14 @@ export function mountChapterNote(container, bookId, chapter) {
     ),
     onMount: (element) => {
       wireFavoriteButtons(element);
+      element.querySelector("#export-md")?.addEventListener("click", () => {
+        const note = getNote();
+        const header = `# ${label}\n\n`;
+        downloadMarkdown(`${label}.md`, `${header}${note?.content ?? ""}`);
+      });
+      element.querySelector("#export-pdf")?.addEventListener("click", () => {
+        printNote(label, getNote()?.title || "", getNote()?.content ?? "");
+      });
       element.querySelector("#delete-note")?.addEventListener("click", () => {
         if (!confirm(`Excluir a nota de "${label}"? Esta ação não pode ser desfeita.`)) return;
         deleteScriptureNote(bookId, chapter);

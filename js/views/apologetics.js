@@ -1,4 +1,5 @@
 import { escapeHtml } from "../dom.js";
+import { downloadMarkdown, printNote, sanitizeFilename } from "../note-export.js";
 import { favoriteButtonHtml, removeFavorite, wireFavoriteButtons } from "../favorites.js";
 import { getBacklinks, renderBacklinks, resolveWikiLink } from "../links.js";
 import {
@@ -69,6 +70,8 @@ export function mountEditor(container, id) {
     footerHtml: `
       <div class="editor-buttons">
         ${favoriteButtonHtml(`apologetics:${id}`)}
+        <button id="export-md" class="text-button" type="button">Exportar .md</button>
+        <button id="export-pdf" class="text-button" type="button">Exportar PDF</button>
         <button id="delete-note" class="button secondary" type="button">Excluir nota</button>
       </div>
     `,
@@ -77,6 +80,15 @@ export function mountEditor(container, id) {
     ),
     onMount: (element) => {
       wireFavoriteButtons(element);
+      element.querySelector("#export-md")?.addEventListener("click", () => {
+        const current = getApologeticsNote(id);
+        const name = sanitizeFilename(current?.title) || "sem-titulo";
+        downloadMarkdown(`${name}.md`, current?.content ?? "");
+      });
+      element.querySelector("#export-pdf")?.addEventListener("click", () => {
+        const current = getApologeticsNote(id);
+        printNote(current?.title || "Sem título", "", current?.content ?? "");
+      });
       element.querySelector("#delete-note")?.addEventListener("click", () => {
         const current = getApologeticsNote(id);
         if (!confirm(`Excluir "${current?.title || "Sem título"}"? Esta ação não pode ser desfeita.`)) {

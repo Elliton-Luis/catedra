@@ -511,7 +511,8 @@ p {
   gap: 0.5rem;
 }
 
-.favorite-button {
+.favorite-button,
+.text-button {
   padding: 0.35rem 0.6rem;
   border: none;
   border-radius: var(--radius-small);
@@ -523,7 +524,8 @@ p {
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.favorite-button:hover {
+.favorite-button:hover,
+.text-button:hover {
   background-color: var(--color-accent-soft);
   color: var(--color-text);
 }
