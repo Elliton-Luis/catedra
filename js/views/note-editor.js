@@ -1,18 +1,10 @@
 import { escapeHtml } from "../dom.js";
 import { renderMarkdown } from "../markdown.js";
 
-// Shared Markdown note editor used by Apologetics and Scripture notes.
-// Options:
-//   backHtml       - markup for the back link
-//   heading        - fixed, non-editable title (scripture notes)
-//   getTitle       - accessor for the editable title (apologetics notes)
-//   onTitleChange  - called when the editable title changes
-//   getContent     - accessor for the current Markdown content
-//   onContentChange- called on every content change (autosave)
-//   resolveWiki    - resolver for [[wiki links]]
-//   footerHtml     - extra actions row markup (e.g. delete button)
-//   belowHtml      - markup rendered below the editor (e.g. backlinks)
-//   onMount        - callback after each render for custom event wiring
+// Shared Markdown note editor for both note kinds.
+// The host view supplies accessors (getTitle/getContent), change callbacks
+// for autosave, and optional markup: back link, fixed heading, footer
+// actions, content rendered below the editor, and a [[wiki link]] resolver.
 
 export function mount(container, options) {
   let mode = "write";
