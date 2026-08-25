@@ -1,4 +1,5 @@
 import { applyBackup, downloadBackup, parseBackup } from "../backup.js";
+import { isInstallAvailable, onInstallAvailability, promptInstall } from "../pwa.js";
 
 export function mount(container) {
   container.innerHTML = `
@@ -16,10 +17,30 @@ export function mount(container) {
       </div>
       <p id="data-status" class="metadata" aria-live="polite"></p>
     </section>
+    <section aria-labelledby="app-heading">
+      <h2 id="app-heading">Aplicativo</h2>
+      <div class="data-actions" id="install-area" hidden>
+        <button id="install-app" class="button secondary" type="button">Instalar aplicativo</button>
+        <span class="metadata">Permite abrir o Cátedra offline, como aplicativo.</span>
+      </div>
+    </section>
   `;
 
   const status = container.querySelector("#data-status");
   const fileInput = container.querySelector("#import-data");
+
+  // Discreet install option: only shown when the browser offers installation.
+  const installArea = container.querySelector("#install-area");
+  function refreshInstallArea(available) {
+    installArea.hidden = !available;
+  }
+  refreshInstallArea(isInstallAvailable());
+  onInstallAvailability(refreshInstallArea);
+
+  container.querySelector("#install-app").addEventListener("click", async () => {
+    await promptInstall();
+    refreshInstallArea(isInstallAvailable());
+  });
 
   container.querySelector("#export-data").addEventListener("click", () => {
     downloadBackup();

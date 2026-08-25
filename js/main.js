@@ -3,6 +3,7 @@ import * as apologetics from "./views/apologetics.js";
 import * as favorites from "./views/favorites.js";
 import * as search from "./views/search.js";
 import * as settings from "./views/settings.js";
+import { registerServiceWorker } from "./pwa.js";
 
 const app = document.querySelector("#app");
 
@@ -87,4 +88,5 @@ function resolveRoute() {
 renderShell();
 resolveRoute();
 
+registerServiceWorker();
 window.addEventListener("hashchange", resolveRoute);
