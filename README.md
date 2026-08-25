@@ -16,12 +16,15 @@ O Cátedra funciona inteiramente no navegador: sem backend, sem banco de dados, 
 - Favoritos persistentes para livros, estudos bíblicos e notas, exibidos em grupos na seção Favoritos
 - Portabilidade de dados: exportação e importação de arquivo JSON versionado (estudos bíblicos, notas e favoritos) em Ajustes & Dados, permitindo migrar entre navegadores ou dispositivos
 - Exportação individual de notas em `.md` (Markdown original) ou PDF (via diálogo de impressão do navegador, com tipografia e margens adequadas para leitura e impressão)
+- Suporte básico a PWA: instalável como aplicativo, funciona offline após o primeiro carregamento (service worker com cache dos arquivos estáticos; os dados permanecem no armazenamento local)
 
 ## Estrutura do projeto
 
 ```text
 catedra/
 ├── index.html      # Documento HTML base
+├── sw.js           # Service worker (cache offline dos arquivos estáticos)
+├── manifest.webmanifest  # Manifest do PWA
 ├── css/
 │   └── style.css   # Estilos base e tokens de design
 ├── js/
