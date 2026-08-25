@@ -1,50 +1,52 @@
-# Study Notebook
+# Cátedra
 
-A lightweight, local-first web application for personal Bible studies and apologetics notes.
+Um aplicativo web leve e *local-first* para estudos bíblicos pessoais e notas de apologética.
 
-Study Notebook runs entirely in the browser: no backend, no database, no accounts, no cloud. Your study data stays with you, on your machine.
+O Cátedra funciona inteiramente no navegador: sem backend, sem banco de dados, sem contas, sem nuvem. Seus dados de estudo ficam com você, na sua máquina.
 
-## Current features
+## Funcionalidades atuais
 
-- Minimal static interface mounted with vanilla JavaScript
-- Calm, readable visual foundation
-- Scriptures section: browse the 73 books of the Catholic Bible in canonical order, with category, chapter count, traditional authorship and approximate date
-- Apologetics section: create free-form notes (no imposed categories), edit title and content with automatic saving to browser local storage, and delete with confirmation
+- Interface estática minimalista em português, montada com JavaScript vanilla
+- Identidade visual calma e legível
+- Seção Escrituras: navegação pelos 73 livros da Bíblia Católica em ordem canônica, com categoria, número de capítulos, autoria tradicional e data aproximada
+- Seção Apologética: criação de notas livres (sem categorias impostas), edição de título e conteúdo com salvamento automático no armazenamento local do navegador, e exclusão com confirmação
 
-## Project structure
+## Estrutura do projeto
 
 ```text
-study-notebook/
-├── index.html      # Base HTML document
+catedra/
+├── index.html      # Documento HTML base
 ├── css/
-│   └── style.css   # Base styles and design tokens
+│   └── style.css   # Estilos base e tokens de design
 ├── js/
-│   ├── main.js     # Application entry point (shell, navigation, routing)
+│   ├── main.js     # Ponto de entrada (shell, navegação, rotas)
 │   ├── data/
-│   │   └── bible-books.js  # The 73 Catholic Bible books (static data)
+│   │   └── bible-books.js  # Os 73 livros da Bíblia Católica (dados estáticos)
 │   └── views/
-│       ├── scriptures.js    # Scriptures section view
-│       └── apologetics.js   # Apologetics notes (storage and views)
-├── assets/         # Static assets
+│       ├── scriptures.js    # Visão da seção Escrituras
+│       └── apologetics.js   # Notas de apologética (armazenamento e visões)
+├── assets/         # Arquivos estáticos
 └── README.md
 ```
 
-## How to run
+Todo o código-fonte é escrito em inglês; apenas os textos exibidos ao usuário estão em português.
 
-No build step or server is required. Open `index.html` directly in a browser.
+## Como executar
 
-Optionally, serve it locally:
+Nenhuma etapa de build ou servidor é necessária. Abra o `index.html` diretamente no navegador.
+
+Opcionalmente, sirva localmente:
 
 ```sh
 python3 -m http.server 8080
 ```
 
-Then visit `http://localhost:8080`.
+E acesse `http://localhost:8080`.
 
-## Screenshots
+## Capturas de tela
 
-<!-- Add screenshots here -->
+<!-- Adicione capturas de tela aqui -->
 
-## License
+## Licença
 
-Distributed under the [MIT License](LICENSE).
+Distribuído sob a [Licença MIT](LICENSE).
