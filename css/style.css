@@ -107,7 +107,8 @@ p {
   transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.site-nav a:hover {
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
   color: var(--color-text);
   background-color: var(--color-accent-soft);
 }
@@ -162,8 +163,7 @@ p {
   background-color: var(--color-accent-soft);
 }
 
-.input,
-.search-field {
+.input {
   width: 100%;
   padding: 0.55rem 0.75rem;
   border: 1px solid var(--color-border);
@@ -508,6 +508,7 @@ p {
 
 .editor-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 

@@ -6,7 +6,7 @@ import * as settings from "./views/settings.js";
 
 const app = document.querySelector("#app");
 
-function renderShell(contentHtml) {
+function renderShell() {
   app.innerHTML = `
     <a class="skip-link" href="#content">Pular para o conteúdo</a>
     <header class="site-header">
@@ -23,10 +23,26 @@ function renderShell(contentHtml) {
         </nav>
       </div>
     </header>
-    <main id="content" class="page">
-      ${contentHtml}
-    </main>
+    <main id="content" class="page" tabindex="-1"></main>
   `;
+
+  const skipLink = app.querySelector(".skip-link");
+  skipLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    document.querySelector("#content").focus();
+  });
+}
+
+// The shell is rendered once; only the content area changes per route.
+function updateNavCurrent(hash) {
+  for (const link of app.querySelectorAll(".site-nav a")) {
+    const target = link.getAttribute("href");
+    if (hash === target || hash.startsWith(target + "/")) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  }
 }
 
 function renderWelcome(container) {
@@ -42,21 +58,11 @@ function renderWelcome(container) {
   `;
 }
 
-function renderSectionPlaceholder(container, name) {
-  container.innerHTML = `
-    <div class="section-header">
-      <h1>${name}</h1>
-    </div>
-    <section class="empty-state">
-      <p>Nada por aqui ainda.</p>
-      <p class="metadata">Esta seção será implementada futuramente.</p>
-    </section>
-  `;
-}
-
 function resolveRoute() {
   const container = document.querySelector("#content");
   const hash = location.hash;
+  updateNavCurrent(hash);
+
   if (hash === "#scriptures") {
     scriptures.mount(container);
   } else if (hash.startsWith("#scriptures/")) {
@@ -78,11 +84,7 @@ function resolveRoute() {
   }
 }
 
-function render() {
-  renderShell("");
-  resolveRoute();
-}
+renderShell();
+resolveRoute();
 
-window.addEventListener("hashchange", render);
-
-render();
+window.addEventListener("hashchange", resolveRoute);
