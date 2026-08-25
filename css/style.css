@@ -1,12 +1,13 @@
+/* Design tokens: warm parchment palette, serif for reading, sans for UI. */
 :root {
-  --color-bg: #faf8f3;
-  --color-surface: #fffefb;
-  --color-text: #33302a;
-  --color-text-soft: #857e72;
-  --color-accent: #5f5648;
-  --color-accent-strong: #4d4539;
-  --color-accent-soft: #f0ebe1;
-  --color-border: #e4ded2;
+  --color-bg: #f8f4ea;
+  --color-surface: #fefbf4;
+  --color-text: #322e24;
+  --color-text-soft: #7d7666;
+  --color-accent: #60563f;
+  --color-accent-strong: #4c4433;
+  --color-accent-soft: #efe9d8;
+  --color-border: #e3dcc9;
   --font-serif: Georgia, "Times New Roman", serif;
   --font-sans: system-ui, -apple-system, sans-serif;
   --radius-small: 4px;
@@ -21,6 +22,7 @@
 
 html {
   height: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -29,7 +31,7 @@ body {
   color: var(--color-text);
   font-family: var(--font-serif);
   font-size: 1.0625rem;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 h1,
@@ -63,7 +65,8 @@ p {
   top: 1rem;
 }
 
-/* Application shell */
+/* Application shell: brand above navigation on small screens,
+   a single quiet row on desktop. */
 
 .site-header {
   background-color: var(--color-surface);
@@ -72,36 +75,41 @@ p {
 
 .site-header-inner {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem 2rem;
+  flex-direction: column;
+  gap: 0.25rem;
   max-width: 56rem;
   margin: 0 auto;
-  padding: 0.75rem 1.25rem;
+  padding: 0.875rem 1rem 0.25rem;
 }
 
 .brand {
   font-family: var(--font-serif);
-  font-size: 1.6rem;
+  font-size: 1.55rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--color-text);
+  text-decoration: none;
 }
 
 .site-nav ul {
   display: flex;
-  flex-wrap: nowrap;
   gap: 0.125rem;
   list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.site-nav ul::-webkit-scrollbar {
+  display: none;
 }
 
 .site-nav a {
   display: block;
-  padding: 0.35rem 0.6rem;
+  padding: 0.5rem 0.65rem;
   white-space: nowrap;
   border-radius: var(--radius-small);
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--color-text-soft);
   text-decoration: none;
   transition: color 0.15s ease, background-color 0.15s ease;
@@ -113,32 +121,33 @@ p {
   background-color: var(--color-accent-soft);
 }
 
+/* Page column: narrow enough for comfortable reading on any screen. */
+
 .page {
-  max-width: 44rem;
+  max-width: 46rem;
   margin: 0 auto;
-  padding: 2.5rem 1.25rem 4rem;
+  padding: 1.75rem 1.125rem 3rem;
 }
 
-/* Shared visual patterns */
-
 .section-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .section-header h1 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   color: var(--color-text);
+  margin-bottom: 0.2rem;
 }
 
 .metadata {
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 0.87rem;
   color: var(--color-text-soft);
 }
 
 .button {
   display: inline-block;
-  padding: 0.55rem 1.1rem;
+  padding: 0.6rem 1.1rem;
   border: none;
   border-radius: var(--radius-small);
   background-color: var(--color-accent);
@@ -165,7 +174,7 @@ p {
 
 .input {
   width: 100%;
-  padding: 0.55rem 0.75rem;
+  padding: 0.6rem 0.75rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-small);
   background-color: var(--color-surface);
@@ -186,11 +195,11 @@ p {
   margin-top: 0.5rem;
 }
 
-/* Scripture book list */
+/* Lists: books, notes, search results, backlinks. */
 
 #content h2 {
-  font-size: 1.35rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
 }
 
 .category-title {
@@ -216,7 +225,7 @@ p {
   justify-content: space-between;
   align-items: baseline;
   gap: 1rem;
-  padding: 0.6rem 0.5rem;
+  padding: 0.65rem 0.5rem;
   cursor: pointer;
   border-radius: var(--radius-small);
   transition: background-color 0.15s ease;
@@ -259,14 +268,12 @@ p {
   font-size: 0.78rem;
 }
 
-/* Note list and editor */
-
 .list-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 0.6rem 0.5rem;
+  padding: 0.65rem 0.5rem;
   color: var(--color-text);
   text-decoration: none;
   border-radius: var(--radius-small);
@@ -285,6 +292,8 @@ p {
   background-color: var(--color-accent);
 }
 
+/* Note editor */
+
 .back-link {
   display: inline-block;
   margin-bottom: 1.25rem;
@@ -297,14 +306,14 @@ p {
 
 .title-input {
   width: 100%;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.35rem;
   border: none;
   border-bottom: 1px solid transparent;
   border-radius: 0;
   background: transparent;
   color: var(--color-text);
   font-family: var(--font-serif);
-  font-size: 1.6rem;
+  font-size: 1.45rem;
 }
 
 .title-input:focus-visible {
@@ -314,8 +323,8 @@ p {
 
 .content-textarea {
   width: 100%;
-  min-height: 55vh;
-  margin-top: 1rem;
+  min-height: 50vh;
+  margin-top: 0.875rem;
   padding: 1rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-small);
@@ -323,19 +332,9 @@ p {
   color: var(--color-text);
   font-family: var(--font-serif);
   font-size: 1.05rem;
-  line-height: 1.7;
+  line-height: 1.75;
   resize: vertical;
 }
-
-.editor-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-}
-
-/* Editor mode toggle */
 
 .mode-toggle {
   display: inline-flex;
@@ -347,12 +346,12 @@ p {
 }
 
 .mode-toggle button {
-  padding: 0.35rem 0.9rem;
+  padding: 0.45rem 1rem;
   border: none;
   background-color: transparent;
   color: var(--color-text-soft);
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
@@ -366,24 +365,62 @@ p {
   color: var(--color-surface);
 }
 
+.editor-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.875rem;
+}
+
+.editor-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.favorite-button,
+.text-button {
+  padding: 0.45rem 0.65rem;
+  border: none;
+  border-radius: var(--radius-small);
+  background-color: transparent;
+  color: var(--color-text-soft);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.favorite-button:hover,
+.text-button:hover {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+.favorite-button.active {
+  color: var(--color-accent-strong);
+}
+
 /* Scripture chapter grid */
 
 .chapter-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
-  margin: 0.75rem 0.5rem 1rem;
+  margin: 0.75rem 0.25rem 1rem;
 }
 
 .chapter {
-  min-width: 2rem;
-  padding: 0.25rem 0.4rem;
+  min-width: 2.4rem;
+  padding: 0.4rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-small);
   background-color: var(--color-surface);
   color: var(--color-text-soft);
   font-family: var(--font-sans);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
+  line-height: 1.2;
   text-align: center;
   text-decoration: none;
   transition: background-color 0.15s ease, color 0.15s ease;
@@ -408,7 +445,7 @@ p {
 }
 
 .markdown p {
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
 }
 
 .markdown h1,
@@ -417,32 +454,32 @@ p {
 .markdown h4,
 .markdown h5,
 .markdown h6 {
-  margin: 1.5rem 0 0.5rem;
+  margin: 1.6rem 0 0.6rem;
 }
 
 .markdown h1 {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
 }
 
 .markdown h2 {
-  font-size: 1.25rem;
+  font-size: 1.28rem;
 }
 
 .markdown h3 {
-  font-size: 1.1rem;
+  font-size: 1.12rem;
 }
 
 .markdown ul,
 .markdown ol {
-  margin: 0 0 1rem 1.5rem;
+  margin: 0 0 1.1rem 1.5rem;
 }
 
 .markdown li {
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.3rem;
 }
 
 .markdown blockquote {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   padding: 0.5rem 1.25rem;
   border-left: 3px solid var(--color-accent);
   background-color: var(--color-accent-soft);
@@ -462,7 +499,7 @@ p {
 }
 
 .markdown pre {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   padding: 1rem;
   border-radius: var(--radius-medium);
   background-color: var(--color-accent-soft);
@@ -492,45 +529,12 @@ p {
   margin-top: 2.5rem;
 }
 
-/* Favorites */
-
-.editor-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.favorite-button,
-.text-button {
-  padding: 0.35rem 0.6rem;
-  border: none;
-  border-radius: var(--radius-small);
-  background-color: transparent;
-  color: var(--color-text-soft);
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-
-.favorite-button:hover,
-.text-button:hover {
-  background-color: var(--color-accent-soft);
-  color: var(--color-text);
-}
-
-.favorite-button.active {
-  color: var(--color-accent-strong);
-}
-
-/* Search */
+/* Search and data transfer */
 
 #search-input {
-  max-width: 28rem;
+  max-width: 100%;
   margin-bottom: 1.5rem;
 }
-
-/* Data transfer */
 
 .data-actions {
   display: flex;
@@ -544,16 +548,38 @@ p {
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
-  .brand {
-    font-size: 1.35rem;
+/* Desktop: use the extra space, keep the same structure. */
+
+@media (min-width: 700px) {
+  .site-header-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 1rem 1.5rem;
   }
 
-  .site-nav ul {
-    overflow-x: auto;
+  .brand {
+    font-size: 1.85rem;
+  }
+
+  .site-nav a {
+    padding: 0.4rem 0.75rem;
   }
 
   .page {
-    padding: 1.75rem 1rem 3rem;
+    padding: 2.75rem 1.5rem 4rem;
+  }
+
+  .section-header h1 {
+    font-size: 1.85rem;
+  }
+
+  .title-input {
+    font-size: 1.7rem;
+  }
+
+  #search-input {
+    max-width: 28rem;
   }
 }

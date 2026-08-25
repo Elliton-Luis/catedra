@@ -12,7 +12,7 @@ function renderShell() {
     <a class="skip-link" href="#content">Pular para o conteúdo</a>
     <header class="site-header">
       <div class="site-header-inner">
-        <span class="brand">Cátedra</span>
+        <a class="brand" href="#">Cátedra</a>
         <nav aria-label="Navegação principal">
           <ul class="site-nav">
             <li><a href="#scriptures">Escrituras</a></li>
