@@ -1,73 +1,92 @@
-# Cátedra
+# Study Notebook
 
-Um aplicativo web leve e *local-first* para estudos bíblicos pessoais e notas de apologética.
+A lightweight, local-first notebook for personal Bible study and apologetics.
+The application interface is in Portuguese and displays the name "Cátedra".
 
-O Cátedra funciona inteiramente no navegador: sem backend, sem banco de dados, sem contas, sem nuvem. Seus dados de estudo ficam com você, na sua máquina.
+No backend, no accounts, no cloud. Everything runs in the browser and your data
+stays in your browser's local storage.
 
-## Funcionalidades atuais
+## Concept
 
-- Interface estática minimalista em português, montada com JavaScript vanilla
-- Identidade visual calma e legível
-- Seção Escrituras: navegação pelos 73 livros da Bíblia Católica em ordem canônica, com categoria, número de capítulos, autoria tradicional e data aproximada; notas em Markdown por capítulo (`livro + capítulo`)
-- Seção Apologética: criação de notas livres (sem categorias impostas), edição de título e conteúdo com salvamento automático no armazenamento local do navegador, e exclusão com confirmação
-- Editor de Markdown próprio e seguro: títulos, negrito, itálico, listas, citações, links, código e parágrafos, com alternância entre os modos "Escrever" e "Ler"
-- Links internos entre notas no formato `[[Título]]` ou `[[Romanos 3]]`, além de backlinks ("Referenciada por") derivados do conteúdo existente
-- Busca global simples (texto parcial, sem diferenciar maiúsculas) sobre livros, estudos bíblicos e notas, com resultados atualizados enquanto o usuário digita
-- Favoritos persistentes para livros, estudos bíblicos e notas, exibidos em grupos na seção Favoritos
-- Portabilidade de dados: exportação e importação de arquivo JSON versionado (estudos bíblicos, notas e favoritos) em Ajustes & Dados, permitindo migrar entre navegadores ou dispositivos
-- Exportação individual de notas em `.md` (Markdown original) ou PDF (via diálogo de impressão do navegador, com tipografia e margens adequadas para leitura e impressão)
-- Suporte básico a PWA: instalável como aplicativo, funciona offline após o primeiro carregamento (service worker com cache dos arquivos estáticos; os dados permanecem no armazenamento local)
+Study Notebook has two kinds of notes:
 
-## Estrutura do projeto
+- **Scriptures** — one note per Bible chapter, identified by `book + chapter`.
+  The 73 books of the Catholic Bible are pre-registered; you write the content.
+- **Apologetics** — free-form notes with your own title and stable ID.
+  No categories or subjects are imposed by the application.
+
+Both are a single Markdown document and can link to each other.
+
+## Features
+
+- 73 books of the Catholic Bible in canonical order, grouped by category
+- Chapter studies with a starter template (`book + chapter` identity)
+- Free-form Apologetics notes
+- Minimal Markdown editor with read/write modes
+- Autosave to `localStorage`
+- Wiki-style links between notes (`[[Sola Scriptura]]`, `[[Romanos 3]]`)
+- Backlinks derived from note contents ("Referenced by")
+- Global search (books, chapter studies and notes)
+- Favorites for books, chapters and notes
+- Data export/import as versioned JSON backup
+- Per-note export to `.md`
+- Per-note export to PDF via the browser print dialog
+- Basic PWA support: installable, works offline after first load
+
+## Screenshots
+
+<!-- Add real screenshots here -->
+
+## Structure
 
 ```text
-catedra/
-├── index.html      # Documento HTML base
-├── sw.js           # Service worker (cache offline dos arquivos estáticos)
-├── manifest.webmanifest  # Manifest do PWA
-├── css/
-│   └── style.css   # Estilos base e tokens de design
-├── js/
-│   ├── main.js     # Ponto de entrada (shell, navegação, rotas)
-│   ├── dom.js      # Utilitários de DOM
-│   ├── store.js    # Helpers de JSON sobre localStorage
-│   ├── notes-store.js  # Persistência das notas (apologética e escrituras)
-│   ├── markdown.js # Renderizador Markdown mínimo e seguro
-│   ├── links.js    # Resolução de [[links]] e backlinks
-│   ├── favorites.js    # Favoritos persistentes (referências estáveis)
-│   ├── backup.js   # Exportação/importação de dados (JSON versionado)
-│   ├── note-export.js  # Exportação individual (.md e PDF via impressão)
-│   ├── data/
-│   │   └── bible-books.js  # Os 73 livros da Bíblia Católica (dados estáticos)
-│   └── views/
-│       ├── scriptures.js    # Visão da seção Escrituras e notas de capítulo
-│       ├── apologetics.js   # Visão da seção Apologética
-│       ├── search.js        # Busca global
-│       ├── favorites.js     # Seção Favoritos
-│       ├── settings.js      # Ajustes & Dados (exportar/importar)
-│       └── note-editor.js   # Editor de notas em Markdown (escrita/leitura)
-├── assets/         # Arquivos estáticos
-└── README.md
+study-notebook/
+├── index.html              # Base HTML document
+├── sw.js                   # Service worker (offline cache)
+├── manifest.webmanifest    # PWA manifest
+├── css/style.css           # Styles and design tokens
+├── assets/                 # Icons
+└── js/
+    ├── main.js             # Shell, navigation and hash routing
+    ├── dom.js / store.js   # Small shared helpers
+    ├── notes-store.js      # localStorage persistence for all notes
+    ├── markdown.js         # Safe minimal Markdown renderer
+    ├── links.js            # [[wiki links]] resolution and backlinks
+    ├── favorites.js        # Persistent favorites
+    ├── backup.js           # JSON export/import
+    ├── note-export.js      # .md download and print-to-PDF view
+    ├── pwa.js              # Service worker registration, install prompt
+    ├── data/bible-books.js # The 73 books (static data)
+    └── views/              # One module per screen plus the shared note editor
 ```
 
-Todo o código-fonte é escrito em inglês; apenas os textos exibidos ao usuário estão em português.
+## Running
 
-## Como executar
-
-Nenhuma etapa de build ou servidor é necessária. Abra o `index.html` diretamente no navegador.
-
-Opcionalmente, sirva localmente:
+Any static file server works. No build step, no dependencies.
 
 ```sh
 python3 -m http.server 8080
 ```
 
-E acesse `http://localhost:8080`.
+Then open `http://localhost:8080`. A server is required because the app uses
+ES modules and registers a service worker; opening `index.html` directly via
+`file://` will not load properly.
 
-## Capturas de tela
+## Design
 
-<!-- Adicione capturas de tela aqui -->
+The visual intent is a quiet personal study notebook: soft warm tones,
+serif typography for reading, restrained spacing and almost no decoration.
+It should feel appropriate for Scripture and apologetics, not like a
+productivity dashboard.
 
-## Licença
+## Principles
 
-Distribuído sob a [Licença MIT](LICENSE).
+- KISS and YAGNI: only implemented features, no speculative architecture
+- SOLID without overengineering: plain modules and functions, no frameworks
+- Local-first: all data lives in the user's browser
+- Minimal dependencies: vanilla HTML/CSS/JavaScript only
+
+## License
+
+Released under the [MIT License](LICENSE). You are free to use, modify,
+redistribute and reuse the software according to its terms.
