@@ -54,8 +54,8 @@ export function mountList(container) {
 
   container.innerHTML = `
     <div class="section-header">
-      <h1>Apologetics</h1>
-      <p class="metadata">${notes.length} ${notes.length === 1 ? "note" : "notes"}.</p>
+      <h1>Apologética</h1>
+      <p class="metadata">${notes.length} ${notes.length === 1 ? "nota" : "notas"}.</p>
     </div>
     ${
       notes.length
@@ -65,8 +65,8 @@ export function mountList(container) {
                 (note) => `
               <li>
                 <a class="list-link" href="#apologetics/${encodeURIComponent(note.id)}">
-                  <span>${escapeHtml(note.title) || "Untitled"}</span>
-                  ${note.content ? '<span class="content-dot" role="img" aria-label="Contains content"></span>' : ""}
+                  <span>${escapeHtml(note.title) || "Sem título"}</span>
+                  ${note.content ? '<span class="content-dot" role="img" aria-label="Contém conteúdo"></span>' : ""}
                 </a>
               </li>
             `
@@ -74,10 +74,10 @@ export function mountList(container) {
               .join("")}
           </ul>`
         : `<section class="empty-state">
-            <p>You haven't created any notes yet.</p>
+            <p>Você ainda não criou nenhuma nota.</p>
           </section>`
     }
-    <button id="new-note" class="button" type="button">New note</button>
+    <button id="new-note" class="button" type="button">Nova nota</button>
   `;
 
   container.querySelector("#new-note").addEventListener("click", () => {
@@ -90,33 +90,33 @@ export function mountEditor(container, id) {
 
   if (!note) {
     container.innerHTML = `
-      <a class="back-link metadata" href="#apologetics">&larr; Apologetics</a>
+      <a class="back-link metadata" href="#apologetics">&larr; Apologética</a>
       <section class="empty-state">
-        <p>This note no longer exists.</p>
+        <p>Esta nota não existe mais.</p>
       </section>
     `;
     return;
   }
 
   container.innerHTML = `
-    <a class="back-link metadata" href="#apologetics">&larr; Apologetics</a>
+    <a class="back-link metadata" href="#apologetics">&larr; Apologética</a>
     <input
       id="note-title"
       class="title-input"
       type="text"
       value="${escapeHtml(note.title)}"
-      placeholder="Title"
-      aria-label="Note title"
+      placeholder="Título"
+      aria-label="Título da nota"
     >
     <textarea
       id="note-content"
       class="content-textarea"
-      placeholder="Write your study (Markdown supported in a future step)"
-      aria-label="Note content"
+      placeholder="Escreva seu estudo (Markdown será suportado em uma etapa futura)"
+      aria-label="Conteúdo da nota"
     >${escapeHtml(note.content)}</textarea>
     <div class="editor-actions">
-      <p id="save-status" class="metadata" aria-live="polite">Saved</p>
-      <button id="delete-note" class="button secondary" type="button">Delete note</button>
+      <p id="save-status" class="metadata" aria-live="polite">Salvo</p>
+      <button id="delete-note" class="button secondary" type="button">Excluir nota</button>
     </div>
   `;
 
@@ -127,16 +127,16 @@ export function mountEditor(container, id) {
   // Autosave: state is updated and persisted on every input.
   titleInput.addEventListener("input", () => {
     updateNote(id, { title: titleInput.value });
-    saveStatus.textContent = "Saved";
+    saveStatus.textContent = "Salvo";
   });
 
   contentTextarea.addEventListener("input", () => {
     updateNote(id, { content: contentTextarea.value });
-    saveStatus.textContent = "Saved";
+    saveStatus.textContent = "Salvo";
   });
 
   container.querySelector("#delete-note").addEventListener("click", () => {
-    const confirmed = confirm(`Delete "${note.title || "Untitled"}"? This cannot be undone.`);
+    const confirmed = confirm(`Excluir "${note.title || "Sem título"}"? Esta ação não pode ser desfeita.`);
     if (!confirmed) return;
     deleteNote(id);
     location.hash = "#apologetics";
