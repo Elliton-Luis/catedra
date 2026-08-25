@@ -19,18 +19,18 @@ export function mount(container) {
       </div>
       <p id="data-status" class="metadata" aria-live="polite"></p>
     </section>
-    <section aria-labelledby="app-heading">
+    <section aria-labelledby="app-heading" class="settings-section">
       <h2 id="app-heading">Aplicativo</h2>
       <div class="data-actions" id="install-area" hidden>
         <button id="install-app" class="button secondary" type="button">Instalar aplicativo</button>
         <span class="metadata">Permite abrir o Cátedra offline, como aplicativo.</span>
       </div>
     </section>
-    <section aria-labelledby="danger-heading">
+    <section aria-labelledby="danger-heading" class="settings-section">
       <h2 id="danger-heading">Zona de risco</h2>
       <p>Apaga permanentemente todos os estudos bíblicos, notas de apologética e favoritos deste navegador. Se deseja guardar uma cópia, exporte seus dados antes.</p>
       <div class="data-actions">
-        <button id="clear-data" class="button secondary" type="button">Excluir todos os dados</button>
+        <button id="clear-data" class="button danger" type="button">Excluir todos os dados</button>
       </div>
     </section>
   `;

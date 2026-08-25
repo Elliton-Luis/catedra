@@ -587,6 +587,19 @@ p {
   cursor: pointer;
 }
 
+.settings-section {
+  margin-top: 3rem;
+}
+
+.button.danger {
+  background-color: #eed6c8;
+  color: #8a4030;
+}
+
+.button.danger:hover {
+  background-color: #e6c5b1;
+}
+
 /* Desktop: navigation inline beside the brand, same structure. */
 
 @media (min-width: 700px) {
