@@ -1,8 +1,10 @@
-// Small cache-first service worker: all app assets are precached at
-// install time so the application works fully offline. Data itself
-// lives in localStorage and never touches the service worker.
+// Service worker: precaches all app assets at install time so the
+// application works fully offline. Fetches are network-first with
+// cache fallback, so updates arrive as soon as the user is online.
+// Data itself lives in localStorage and never touches the worker.
+// Bump CACHE_NAME whenever shipped files change.
 
-const CACHE_NAME = "catedra-v1";
+const CACHE_NAME = "catedra-v2";
 const PRECACHE = [
   "./",
   "index.html",
@@ -53,15 +55,14 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET" || !request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
+    fetch(request)
+      .then((response) => {
         if (response.ok) {
           const copy = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
         }
         return response;
-      });
-    })
+      })
+      .catch(() => caches.match(request).then((cached) => cached ?? caches.match("./")))
   );
 });
