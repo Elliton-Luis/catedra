@@ -8,6 +8,7 @@ Study Notebook runs entirely in the browser: no backend, no database, no account
 
 - Minimal static interface mounted with vanilla JavaScript
 - Calm, readable visual foundation
+- Scriptures section: browse the 73 books of the Catholic Bible in canonical order, with category, chapter count, traditional authorship and approximate date
 
 ## Project structure
 
@@ -17,7 +18,9 @@ study-notebook/
 ├── css/
 │   └── style.css   # Base styles and design tokens
 ├── js/
-│   └── main.js     # Application entry point (mounting)
+│   ├── main.js     # Application entry point (shell, navigation, views)
+│   └── data/
+│       └── bible-books.js  # The 73 Catholic Bible books (static data)
 ├── assets/         # Static assets
 └── README.md
 ```
