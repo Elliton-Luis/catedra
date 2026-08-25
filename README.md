@@ -14,6 +14,7 @@ O Cátedra funciona inteiramente no navegador: sem backend, sem banco de dados, 
 - Links internos entre notas no formato `[[Título]]` ou `[[Romanos 3]]`, além de backlinks ("Referenciada por") derivados do conteúdo existente
 - Busca global simples (texto parcial, sem diferenciar maiúsculas) sobre livros, estudos bíblicos e notas, com resultados atualizados enquanto o usuário digita
 - Favoritos persistentes para livros, estudos bíblicos e notas, exibidos em grupos na seção Favoritos
+- Portabilidade de dados: exportação e importação de arquivo JSON versionado (estudos bíblicos, notas e favoritos) em Ajustes & Dados, permitindo migrar entre navegadores ou dispositivos
 
 ## Estrutura do projeto
 
@@ -30,6 +31,7 @@ catedra/
 │   ├── markdown.js # Renderizador Markdown mínimo e seguro
 │   ├── links.js    # Resolução de [[links]] e backlinks
 │   ├── favorites.js    # Favoritos persistentes (referências estáveis)
+│   ├── backup.js   # Exportação/importação de dados (JSON versionado)
 │   ├── data/
 │   │   └── bible-books.js  # Os 73 livros da Bíblia Católica (dados estáticos)
 │   └── views/
@@ -37,6 +39,7 @@ catedra/
 │       ├── apologetics.js   # Visão da seção Apologética
 │       ├── search.js        # Busca global
 │       ├── favorites.js     # Seção Favoritos
+│       ├── settings.js      # Ajustes & Dados (exportar/importar)
 │       └── note-editor.js   # Editor de notas em Markdown (escrita/leitura)
 ├── assets/         # Arquivos estáticos
 └── README.md
