@@ -58,6 +58,12 @@ export function replaceApologeticsNotes(notes) {
   );
 }
 
+// Removes every note from both collections.
+export function clearAllNotes() {
+  localStorage.removeItem(APOLOGETICS_NOTES_KEY);
+  localStorage.removeItem(SCRIPTURE_NOTES_KEY);
+}
+
 // Scripture notes: one Markdown document per book + chapter.
 // The id is derived from bookId and chapter, so it stays stable.
 

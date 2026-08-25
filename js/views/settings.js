@@ -1,5 +1,7 @@
 import { applyBackup, downloadBackup, parseBackup } from "../backup.js";
+import { clearAllNotes } from "../notes-store.js";
 import { isInstallAvailable, onInstallAvailability, promptInstall } from "../pwa.js";
+import { replaceFavorites } from "../favorites.js";
 
 export function mount(container) {
   container.innerHTML = `
@@ -22,6 +24,13 @@ export function mount(container) {
       <div class="data-actions" id="install-area" hidden>
         <button id="install-app" class="button secondary" type="button">Instalar aplicativo</button>
         <span class="metadata">Permite abrir o Cátedra offline, como aplicativo.</span>
+      </div>
+    </section>
+    <section aria-labelledby="danger-heading">
+      <h2 id="danger-heading">Zona de risco</h2>
+      <p>Apaga permanentemente todos os estudos bíblicos, notas de apologética e favoritos deste navegador. Se deseja guardar uma cópia, exporte seus dados antes.</p>
+      <div class="data-actions">
+        <button id="clear-data" class="button secondary" type="button">Excluir todos os dados</button>
       </div>
     </section>
   `;
@@ -66,5 +75,14 @@ export function mount(container) {
     applyBackup(backup);
     status.textContent = "Dados importados com sucesso.";
     fileInput.value = "";
+  });
+
+  container.querySelector("#clear-data").addEventListener("click", () => {
+    if (!confirm("Excluir TODOS os dados (estudos, notas e favoritos)? Esta ação não pode ser desfeita.")) {
+      return;
+    }
+    clearAllNotes();
+    replaceFavorites([]);
+    status.textContent = "Todos os dados foram apagados.";
   });
 }
