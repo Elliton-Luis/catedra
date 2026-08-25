@@ -84,8 +84,8 @@ function renderGroup(title, entries) {
 }
 
 export function mount(container) {
-  const { books, studies, notes } = collectFavorites();
-  const isEmpty = !books.length && !studies.length && !notes.length;
+  const collected = collectFavorites();
+  const isEmpty = !collected.books.length && !collected.studies.length && !collected.notes.length;
 
   container.innerHTML = `
     <div class="section-header">
@@ -97,9 +97,39 @@ export function mount(container) {
             <p>Nenhum favorito ainda.</p>
             <p class="metadata">Use o botão ☆ em livros e notas para favoritá-los.</p>
           </section>`
-        : renderGroup("Livros", books) +
-          renderGroup("Estudos bíblicos", studies) +
-          renderGroup("Notas de Apologética", notes)
+        : `<input id="fav-search" class="input" type="search"
+            placeholder="Buscar nos favoritos..." aria-label="Buscar nos favoritos">
+          <div id="fav-results"></div>`
     }
   `;
+
+  if (isEmpty) return;
+
+  const input = container.querySelector("#fav-search");
+  const results = container.querySelector("#fav-results");
+
+  function run() {
+    results.innerHTML = renderFiltered(collected, input.value);
+  }
+
+  input.addEventListener("input", run);
+  run();
+}
+
+function renderFiltered(collected, query) {
+  const q = query.trim().toLocaleLowerCase();
+  const match = (entry) => entry.label.toLocaleLowerCase().includes(q);
+  const books = q ? collected.books.filter(match) : collected.books;
+  const studies = q ? collected.studies.filter(match) : collected.studies;
+  const notes = q ? collected.notes.filter(match) : collected.notes;
+
+  if (!books.length && !studies.length && !notes.length) {
+    return `<p class="metadata">Nenhum favorito encontrado.</p>`;
+  }
+
+  return (
+    renderGroup("Livros", books) +
+    renderGroup("Estudos bíblicos", studies) +
+    renderGroup("Notas de Apologética", notes)
+  );
 }
