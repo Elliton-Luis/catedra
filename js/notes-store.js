@@ -55,13 +55,20 @@ export function getScriptureNote(bookId, chapter) {
   return loadScriptureNotes().find((note) => note.bookId === bookId && note.chapter === chapter);
 }
 
-export function upsertScriptureNote(bookId, chapter, content) {
+export function upsertScriptureNote(bookId, chapter, changes) {
   const notes = loadScriptureNotes();
   const existing = notes.find((note) => note.bookId === bookId && note.chapter === chapter);
   if (existing) {
-    existing.content = content;
+    Object.assign(existing, changes);
   } else {
-    notes.push({ id: `${bookId}-${chapter}`, bookId, chapter, content });
+    notes.push({
+      id: `${bookId}-${chapter}`,
+      bookId,
+      chapter,
+      title: "",
+      content: "",
+      ...changes,
+    });
   }
   saveJson(SCRIPTURE_NOTES_KEY, notes);
 }

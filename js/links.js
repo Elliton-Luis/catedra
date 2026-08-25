@@ -23,6 +23,10 @@ export function resolveWikiLink(name) {
   const key = normalize(name);
   const note = loadApologeticsNotes().find((note) => normalize(note.title) === key);
   if (note) return { href: `#apologetics/${encodeURIComponent(note.id)}` };
+  const study = loadScriptureNotes().find(
+    (note) => note.title && normalize(note.title) === key
+  );
+  if (study) return { href: `#scriptures/${study.bookId}/${study.chapter}` };
   return findScriptureTarget(name);
 }
 

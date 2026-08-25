@@ -33,8 +33,12 @@ export function collectResults(query) {
     if (!String(note.content ?? "").trim()) continue;
     const book = bibleBooks.find((b) => b.id === note.bookId);
     if (!book) continue;
-    const label = `${book.displayName} ${note.chapter}`;
-    if (normalize(label).includes(q) || normalize(note.content).includes(q)) {
+    const reference = `${book.displayName} ${note.chapter}`;
+    const label = note.title ? `${note.title} (${reference})` : reference;
+    if (
+      normalize(label).includes(q) ||
+      normalize(note.content).includes(q)
+    ) {
       results.push({
         type: "study",
         label,

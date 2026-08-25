@@ -128,7 +128,7 @@ export function mount(container) {
   const chapterSelect = container.querySelector("#study-chapter");
 
   function fillChapters() {
-    const book = bibleBooks.find((b) => b.id === bookSelect.value);
+    const book = bibleBooks.find((b) => b.id === bookSelect.value) ?? bibleBooks[0];
     chapterSelect.innerHTML = Array.from({ length: book.chapters }, (_, index) =>
       `<option value="${index + 1}">${index + 1}</option>`
     ).join("");
@@ -162,9 +162,12 @@ export function mountChapterNote(container, bookId, chapter) {
   noteEditor.mount(container, {
     backHtml,
     heading: label,
+    getTitle: () => getScriptureNote(bookId, chapter)?.title ?? "",
+    onTitleChange: (value) => upsertScriptureNote(bookId, chapter, { title: value }),
+    titlePlaceholder: "Título do estudo (opcional)",
     placeholder: `Escreva seu estudo sobre ${label} em Markdown`,
     getContent: () => getScriptureNote(bookId, chapter)?.content ?? "",
-    onContentChange: (value) => upsertScriptureNote(bookId, chapter, value),
+    onContentChange: (value) => upsertScriptureNote(bookId, chapter, { content: value }),
     resolveWiki: resolveWikiLink,
     footerHtml: `
       <div class="editor-buttons">
@@ -173,7 +176,7 @@ export function mountChapterNote(container, bookId, chapter) {
       </div>
     `,
     belowHtml: renderBacklinks(
-      getBacklinks([label], `#scriptures/${bookId}/${chapter}`)
+      getBacklinks([label, getScriptureNote(bookId, chapter)?.title], `#scriptures/${bookId}/${chapter}`)
     ),
     onMount: (element) => {
       wireFavoriteButtons(element);

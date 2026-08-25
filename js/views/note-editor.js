@@ -31,7 +31,7 @@ export function mount(container, options) {
         options.onTitleChange
           ? `<input id="note-title" class="title-input" type="text"
               value="${escapeHtml(options.getTitle())}"
-              placeholder="Título" aria-label="Título da nota">`
+              placeholder="${options.titlePlaceholder ?? "Título"}" aria-label="Título da nota">`
           : ""
       }
       <div class="mode-toggle" role="group" aria-label="Modo do editor">

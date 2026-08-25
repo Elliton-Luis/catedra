@@ -65,6 +65,7 @@ export function parseBackup(jsonText) {
       id: `${note.bookId}-${note.chapter}`,
       bookId: note.bookId,
       chapter: note.chapter,
+      title: String(note.title ?? ""),
       content: note.content,
     })),
     favorites: data.favorites.filter((ref) => typeof ref === "string"),
