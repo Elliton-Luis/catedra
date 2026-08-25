@@ -28,6 +28,11 @@ export function removeFavorite(reference) {
   );
 }
 
+// Replaces the whole list (used by data import).
+export function replaceFavorites(references) {
+  saveJson(FAVORITES_KEY, references.filter((ref) => typeof ref === "string"));
+}
+
 // Returns true when the reference became a favorite.
 export function toggleFavorite(reference) {
   if (isFavorite(reference)) {

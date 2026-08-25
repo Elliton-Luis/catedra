@@ -34,6 +34,14 @@ export function deleteApologeticsNote(id) {
   );
 }
 
+// Replaces the whole collection (used by data import).
+export function replaceApologeticsNotes(notes) {
+  saveJson(
+    APOLOGETICS_NOTES_KEY,
+    notes.filter((note) => note && typeof note.id === "string")
+  );
+}
+
 // Scripture notes: one Markdown document per book + chapter.
 // The id is derived from bookId and chapter, so it stays stable.
 
@@ -62,5 +70,15 @@ export function deleteScriptureNote(bookId, chapter) {
   saveJson(
     SCRIPTURE_NOTES_KEY,
     loadScriptureNotes().filter((note) => !(note.bookId === bookId && note.chapter === chapter))
+  );
+}
+
+// Replaces the whole collection (used by data import).
+export function replaceScriptureNotes(notes) {
+  saveJson(
+    SCRIPTURE_NOTES_KEY,
+    notes.filter(
+      (note) => note && typeof note.bookId === "string" && Number.isInteger(note.chapter)
+    )
   );
 }
