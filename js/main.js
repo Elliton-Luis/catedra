@@ -4,6 +4,7 @@ import * as apologetics from "./views/apologetics.js";
 import * as prayers from "./views/prayers.js";
 import * as favorites from "./views/favorites.js";
 import * as search from "./views/search.js";
+import * as help from "./views/help.js";
 import * as settings from "./views/settings.js";
 import { registerServiceWorker } from "./pwa.js";
 
@@ -36,6 +37,7 @@ function renderShell() {
             <li><a href="#prayers">Orações</a></li>
             <li><a href="#search">Busca</a></li>
             <li><a href="#favorites">Favoritos</a></li>
+            <li><a href="#help">Ajuda</a></li>
             <li><a href="#settings">Ajustes &amp; Dados</a></li>
           </ul>
         </nav>
@@ -103,6 +105,8 @@ function resolveRoute() {
     favorites.mount(container);
   } else if (hash === "#search") {
     search.mount(container);
+  } else if (hash === "#help") {
+    help.mount(container);
   } else if (hash === "#settings") {
     settings.mount(container);
   } else {

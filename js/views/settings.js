@@ -11,7 +11,7 @@ export function mount(container) {
     </div>
     <section aria-labelledby="data-heading">
       <h2 id="data-heading">Dados</h2>
-      <p>Exporte todos os seus dados (estudos bíblicos, notas de apologética e favoritos) em um arquivo JSON, ou restaure a partir de um arquivo exportado anteriormente. A importação substitui os dados atuais.</p>
+      <p>Exporte todos os seus dados (estudos bíblicos, notas de apologética, orações e favoritos) em um arquivo JSON, ou restaure a partir de um arquivo exportado anteriormente. A importação substitui os dados atuais.</p>
       <div class="data-actions">
         <button id="export-data" class="button" type="button">Exportar dados</button>
         <label class="button secondary" for="import-data">Importar dados</label>
@@ -28,7 +28,7 @@ export function mount(container) {
     </section>
     <section aria-labelledby="danger-heading" class="settings-section">
       <h2 id="danger-heading">Zona de risco</h2>
-      <p>Apaga permanentemente todos os estudos bíblicos, notas de apologética e favoritos deste navegador. Se deseja guardar uma cópia, exporte seus dados antes.</p>
+      <p>Apaga permanentemente todos os estudos bíblicos, notas de apologética, orações e favoritos deste navegador. Se deseja guardar uma cópia, exporte seus dados antes.</p>
       <div class="data-actions">
         <button id="clear-data" class="button danger" type="button">Excluir todos os dados</button>
       </div>
