@@ -1,6 +1,6 @@
 import { bibleBooks } from "../data/bible-books.js";
 import { escapeHtml } from "../dom.js";
-import { loadApologeticsNotes, loadScriptureNotes } from "../notes-store.js";
+import { loadApologeticsNotes, loadPrayers, loadScriptureNotes } from "../notes-store.js";
 
 // How many items each recent section shows at most.
 const RECENT_LIMIT = 5;
@@ -53,16 +53,27 @@ export function mount(container) {
     `;
   });
 
-  if (!scriptureItems.length && !apologeticsItems.length) {
+  const prayerItems = recentNotes(loadPrayers()).map((note) => {
+    const href = `#prayers/${encodeURIComponent(note.id)}`;
+    return `
+      <li>
+        <a class="list-link" href="${href}">
+          <span>${escapeHtml(note.title) || "Sem título"}</span>
+        </a>
+      </li>
+    `;
+  });
+
+  if (!scriptureItems.length && !apologeticsItems.length && !prayerItems.length) {
     container.innerHTML = `
       <div class="section-header">
         <h1>Cátedra</h1>
-        <p class="metadata">Um lugar tranquilo para o estudo da Escritura e da apologética.</p>
+        <p class="metadata">Um lugar tranquilo para o estudo da Escritura, da apologética e da oração.</p>
       </div>
       <section class="empty-state">
         <p>Seus estudos aparecerão aqui.</p>
         <p class="metadata">Comece por onde quiser:</p>
-        <p><a class="button" href="#scriptures">Escrituras</a> <a class="button secondary" href="#apologetics">Apologética</a></p>
+        <p><a class="button" href="#scriptures">Escrituras</a> <a class="button secondary" href="#apologetics">Apologética</a> <a class="button secondary" href="#prayers">Orações</a></p>
       </section>
     `;
     return;
@@ -75,5 +86,6 @@ export function mount(container) {
     </div>
     ${scriptureItems.length ? renderSection("Estudos bíblicos recentes", scriptureItems) : ""}
     ${apologeticsItems.length ? renderSection("Apologética recente", apologeticsItems) : ""}
+    ${prayerItems.length ? renderSection("Orações recentes", prayerItems) : ""}
   `;
 }

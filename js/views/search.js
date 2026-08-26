@@ -1,11 +1,12 @@
 import { bibleBooks } from "../data/bible-books.js";
 import { escapeHtml } from "../dom.js";
-import { loadApologeticsNotes, loadScriptureNotes } from "../notes-store.js";
+import { loadApologeticsNotes, loadPrayers, loadScriptureNotes } from "../notes-store.js";
 
 const TYPE_LABELS = {
   book: "Livro",
   study: "Estudo bíblico",
   note: "Nota de Apologética",
+  prayer: "Oração",
 };
 
 function normalize(value) {
@@ -58,6 +59,16 @@ export function collectResults(query) {
     });
   }
 
+  for (const note of loadPrayers()) {
+    if (!normalize(note.title).includes(q) && !normalize(note.content ?? "").includes(q)) continue;
+    results.push({
+      type: "prayer",
+      label: note.title || "Sem título",
+      detail: snippet(note.content, q),
+      href: `#prayers/${encodeURIComponent(note.id)}`,
+    });
+  }
+
   return results;
 }
 
@@ -96,7 +107,7 @@ export function mount(container) {
   container.innerHTML = `
     <div class="section-header">
       <h1>Busca</h1>
-      <p class="metadata">Procure livros, estudos bíblicos e notas.</p>
+      <p class="metadata">Procure livros, estudos bíblicos, notas e orações.</p>
     </div>
     <input id="search-input" class="input" type="search" placeholder="Buscar..." aria-label="Busca">
     <div id="search-results"></div>

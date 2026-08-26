@@ -1,6 +1,6 @@
 import { bibleBooks } from "./data/bible-books.js";
 import { escapeHtml } from "./dom.js";
-import { loadApologeticsNotes, loadScriptureNotes } from "./notes-store.js";
+import { loadApologeticsNotes, loadPrayers, loadScriptureNotes } from "./notes-store.js";
 
 const WIKI_LINK_PATTERN = /\[\[([^\][]+)\]\]/g;
 
@@ -23,6 +23,8 @@ export function resolveWikiLink(name) {
   const key = normalize(name);
   const note = loadApologeticsNotes().find((note) => normalize(note.title) === key);
   if (note) return { href: `#apologetics/${encodeURIComponent(note.id)}` };
+  const prayer = loadPrayers().find((note) => normalize(note.title) === key);
+  if (prayer) return { href: `#prayers/${encodeURIComponent(prayer.id)}` };
   const study = loadScriptureNotes().find(
     (note) => note.title && normalize(note.title) === key
   );
@@ -41,6 +43,14 @@ export function getBacklinks(targetNames, selfHref) {
 
   for (const note of loadApologeticsNotes()) {
     const href = `#apologetics/${encodeURIComponent(note.id)}`;
+    if (href === selfHref) continue;
+    if (extractWikiNames(note.content).some((key) => keys.includes(key))) {
+      backlinks.push({ label: note.title || "Sem título", href });
+    }
+  }
+
+  for (const note of loadPrayers()) {
+    const href = `#prayers/${encodeURIComponent(note.id)}`;
     if (href === selfHref) continue;
     if (extractWikiNames(note.content).some((key) => keys.includes(key))) {
       backlinks.push({ label: note.title || "Sem título", href });

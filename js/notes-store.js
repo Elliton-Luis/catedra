@@ -2,6 +2,7 @@ import { loadJson, saveJson } from "./store.js";
 
 const APOLOGETICS_NOTES_KEY = "study-notebook.apologetics.notes";
 const SCRIPTURE_NOTES_KEY = "study-notebook.scriptures.notes";
+const PRAYERS_KEY = "study-notebook.prayers";
 
 // Starter structure for new apologetics notes.
 // The user is free to change or discard it entirely.
@@ -59,10 +60,11 @@ export function replaceApologeticsNotes(notes) {
   );
 }
 
-// Removes every note from both collections.
+// Removes every note from all collections.
 export function clearAllNotes() {
   localStorage.removeItem(APOLOGETICS_NOTES_KEY);
   localStorage.removeItem(SCRIPTURE_NOTES_KEY);
+  localStorage.removeItem(PRAYERS_KEY);
 }
 
 // Scripture notes: one Markdown document per book + chapter.
@@ -112,5 +114,41 @@ export function replaceScriptureNotes(notes) {
     notes.filter(
       (note) => note && typeof note.bookId === "string" && Number.isInteger(note.chapter)
     )
+  );
+}
+
+// Prayers: free-titled notes with their own stable ids.
+
+export function loadPrayers() {
+  return loadJson(PRAYERS_KEY, []).filter((note) => note && typeof note.id === "string");
+}
+
+export function getPrayer(id) {
+  return loadPrayers().find((note) => note.id === id);
+}
+
+export function updatePrayer(id, changes) {
+  const notes = loadPrayers();
+  let note = notes.find((n) => n.id === id);
+  if (!note) {
+    note = { id, title: "", content: "" };
+    notes.push(note);
+  }
+  Object.assign(note, changes);
+  note.updatedAt = new Date().toISOString();
+  saveJson(PRAYERS_KEY, notes);
+}
+
+export function deletePrayer(id) {
+  saveJson(
+    PRAYERS_KEY,
+    loadPrayers().filter((note) => note.id !== id)
+  );
+}
+
+export function replacePrayers(notes) {
+  saveJson(
+    PRAYERS_KEY,
+    notes.filter((note) => note && typeof note.id === "string")
   );
 }

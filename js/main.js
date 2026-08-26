@@ -1,6 +1,7 @@
 import * as home from "./views/home.js";
 import * as scriptures from "./views/scriptures.js";
 import * as apologetics from "./views/apologetics.js";
+import * as prayers from "./views/prayers.js";
 import * as favorites from "./views/favorites.js";
 import * as search from "./views/search.js";
 import * as settings from "./views/settings.js";
@@ -32,6 +33,7 @@ function renderShell() {
           <ul>
             <li><a href="#scriptures">Escrituras</a></li>
             <li><a href="#apologetics">Apologética</a></li>
+            <li><a href="#prayers">Orações</a></li>
             <li><a href="#search">Busca</a></li>
             <li><a href="#favorites">Favoritos</a></li>
             <li><a href="#settings">Ajustes &amp; Dados</a></li>
@@ -93,6 +95,10 @@ function resolveRoute() {
     apologetics.mountList(container);
   } else if (hash.startsWith("#apologetics/")) {
     apologetics.mountEditor(container, decodeURIComponent(hash.slice("#apologetics/".length)));
+  } else if (hash === "#prayers") {
+    prayers.mountList(container);
+  } else if (hash.startsWith("#prayers/")) {
+    prayers.mountEditor(container, decodeURIComponent(hash.slice("#prayers/".length)));
   } else if (hash === "#favorites") {
     favorites.mount(container);
   } else if (hash === "#search") {

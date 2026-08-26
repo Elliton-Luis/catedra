@@ -4,7 +4,7 @@
 // Data itself lives in localStorage and never touches the worker.
 // Bump CACHE_NAME whenever shipped files change.
 
-const CACHE_NAME = "catedra-v2";
+const CACHE_NAME = "catedra-v3";
 const PRECACHE = [
   "./",
   "index.html",
@@ -23,6 +23,7 @@ const PRECACHE = [
   "js/data/bible-books.js",
   "js/views/scriptures.js",
   "js/views/apologetics.js",
+  "js/views/prayers.js",
   "js/views/search.js",
   "js/views/favorites.js",
   "js/views/settings.js",

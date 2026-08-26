@@ -1,16 +1,18 @@
 import { bibleBooks } from "./data/bible-books.js";
 import {
   loadApologeticsNotes,
+  loadPrayers,
   loadScriptureNotes,
   replaceApologeticsNotes,
+  replacePrayers,
   replaceScriptureNotes,
 } from "./notes-store.js";
 import { loadFavorites, replaceFavorites } from "./favorites.js";
 
 // Simple versioned backup format, independent of browser or account:
-//   { version, exportedAt, apologeticsNotes, scriptureNotes, favorites }
+//   { version, exportedAt, apologeticsNotes, scriptureNotes, prayerNotes, favorites }
 // Static data (the 73 Bible books) is not included.
-const EXPORT_VERSION = 1;
+const EXPORT_VERSION = 2;
 
 export function buildBackup() {
   return {
@@ -18,11 +20,16 @@ export function buildBackup() {
     exportedAt: new Date().toISOString(),
     apologeticsNotes: loadApologeticsNotes(),
     scriptureNotes: loadScriptureNotes(),
+    prayerNotes: loadPrayers(),
     favorites: loadFavorites(),
   };
 }
 
 function isValidApologeticsNote(note) {
+  return Boolean(note) && typeof note.id === "string" && typeof note.content === "string";
+}
+
+function isValidPrayerNote(note) {
   return Boolean(note) && typeof note.id === "string" && typeof note.content === "string";
 }
 
@@ -45,10 +52,12 @@ export function parseBackup(jsonText) {
   }
 
   if (!data || typeof data !== "object" || Array.isArray(data)) return null;
-  if (data.version !== EXPORT_VERSION) return null;
+  if (data.version !== EXPORT_VERSION && data.version !== 1) return null;
   if (!Array.isArray(data.apologeticsNotes)) return null;
   if (!Array.isArray(data.scriptureNotes)) return null;
   if (!Array.isArray(data.favorites)) return null;
+
+  const prayerNotes = Array.isArray(data.prayerNotes) ? data.prayerNotes : [];
 
   // Invalid entries are dropped instead of rejecting the whole file.
   return {
@@ -67,6 +76,11 @@ export function parseBackup(jsonText) {
       title: String(note.title ?? ""),
       content: note.content,
     })),
+    prayerNotes: prayerNotes.filter(isValidPrayerNote).map((note) => ({
+      id: note.id,
+      title: String(note.title ?? ""),
+      content: note.content,
+    })),
     favorites: data.favorites.filter((ref) => typeof ref === "string"),
   };
 }
@@ -74,6 +88,7 @@ export function parseBackup(jsonText) {
 export function applyBackup(backup) {
   replaceApologeticsNotes(backup.apologeticsNotes);
   replaceScriptureNotes(backup.scriptureNotes);
+  replacePrayers(backup.prayerNotes);
   replaceFavorites(backup.favorites);
 }
 

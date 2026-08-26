@@ -4,7 +4,7 @@ import { loadJson, saveJson } from "./store.js";
 const FAVORITES_KEY = "study-notebook.favorites";
 
 // Favorites are stored as stable string references, never titles:
-//   "book:<bookId>", "scripture:<bookId>/<chapter>", "apologetics:<noteId>"
+//   "book:<bookId>", "scripture:<bookId>/<chapter>", "apologetics:<noteId>", "prayer:<noteId>"
 
 export function loadFavorites() {
   return loadJson(FAVORITES_KEY, []).filter((ref) => typeof ref === "string");

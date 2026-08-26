@@ -1,7 +1,7 @@
 import { bibleBooks } from "../data/bible-books.js";
 import { escapeHtml } from "../dom.js";
 import { loadFavorites, removeFavorite } from "../favorites.js";
-import { loadApologeticsNotes, getScriptureNote } from "../notes-store.js";
+import { loadApologeticsNotes, loadPrayers, getScriptureNote } from "../notes-store.js";
 
 // Resolve each stored favorite reference to a displayable entry.
 // Stale references (deleted notes, invalid chapters) are pruned.
@@ -9,6 +9,7 @@ export function collectFavorites() {
   const books = [];
   const studies = [];
   const notes = [];
+  const prayers = [];
 
   for (const ref of loadFavorites()) {
     if (ref.startsWith("book:")) {
@@ -55,10 +56,23 @@ export function collectFavorites() {
       continue;
     }
 
+    if (ref.startsWith("prayer:")) {
+      const note = loadPrayers().find((n) => n.id === ref.slice("prayer:".length));
+      if (note) {
+        prayers.push({
+          label: note.title || "Sem título",
+          href: `#prayers/${encodeURIComponent(note.id)}`,
+        });
+      } else {
+        removeFavorite(ref);
+      }
+      continue;
+    }
+
     removeFavorite(ref);
   }
 
-  return { books, studies, notes };
+  return { books, studies, notes, prayers };
 }
 
 function renderGroup(title, entries) {
@@ -85,7 +99,8 @@ function renderGroup(title, entries) {
 
 export function mount(container) {
   const collected = collectFavorites();
-  const isEmpty = !collected.books.length && !collected.studies.length && !collected.notes.length;
+  const isEmpty =
+    !collected.books.length && !collected.studies.length && !collected.notes.length && !collected.prayers.length;
 
   container.innerHTML = `
     <div class="section-header">
@@ -122,14 +137,16 @@ function renderFiltered(collected, query) {
   const books = q ? collected.books.filter(match) : collected.books;
   const studies = q ? collected.studies.filter(match) : collected.studies;
   const notes = q ? collected.notes.filter(match) : collected.notes;
+  const prayers = q ? collected.prayers.filter(match) : collected.prayers;
 
-  if (!books.length && !studies.length && !notes.length) {
+  if (!books.length && !studies.length && !notes.length && !prayers.length) {
     return `<p class="metadata">Nenhum favorito encontrado.</p>`;
   }
 
   return (
     renderGroup("Livros", books) +
     renderGroup("Estudos bíblicos", studies) +
-    renderGroup("Notas de Apologética", notes)
+    renderGroup("Notas de Apologética", notes) +
+    renderGroup("Orações", prayers)
   );
 }
