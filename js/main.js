@@ -6,6 +6,7 @@ import * as favorites from "./views/favorites.js";
 import * as search from "./views/search.js";
 import * as help from "./views/help.js";
 import * as settings from "./views/settings.js";
+import { initAutoBackup } from "./backup.js";
 import { registerServiceWorker } from "./pwa.js";
 
 const app = document.querySelector("#app");
@@ -118,4 +119,5 @@ renderShell();
 resolveRoute();
 
 registerServiceWorker();
+initAutoBackup();
 window.addEventListener("hashchange", resolveRoute);
