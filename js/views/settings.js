@@ -1,7 +1,30 @@
-import { applyBackup, downloadBackup, parseBackup } from "../backup.js";
+import { applyBackup, exportBackup, getBackupStatus, parseBackup, tryAutoBackup } from "../backup.js";
 import { clearAllNotes } from "../notes-store.js";
 import { isInstallAvailable, onInstallAvailability, promptInstall } from "../pwa.js";
 import { replaceFavorites } from "../favorites.js";
+
+function formatBackupDate(iso) {
+  if (!iso) return "—";
+  try {
+    const d = new Date(iso);
+    return d.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+  } catch {
+    return iso;
+  }
+}
+
+function renderBackupInfo(container) {
+  const status = getBackupStatus();
+  const metaEl = container.querySelector("#backup-last");
+  const statusEl = container.querySelector("#backup-status");
+  if (metaEl) {
+    metaEl.textContent = `Último backup: ${status.lastBackupAt ? formatBackupDate(status.lastBackupAt) : "nunca"}`;
+  }
+  if (statusEl) {
+    statusEl.textContent = status.pending ? "Status: Backup pendente" : "Status: Backup atualizado";
+    statusEl.setAttribute("data-pending", String(status.pending));
+  }
+}
 
 export function mount(container) {
   container.innerHTML = `
@@ -13,11 +36,14 @@ export function mount(container) {
       <h2 id="data-heading">Dados</h2>
       <p>Exporte todos os seus dados (estudos bíblicos, notas de apologética, orações e favoritos) em um arquivo JSON, ou restaure a partir de um arquivo exportado anteriormente. A importação substitui os dados atuais.</p>
       <div class="data-actions">
-        <button id="export-data" class="button" type="button">Exportar dados</button>
-        <label class="button secondary" for="import-data">Importar dados</label>
+        <button id="export-data" class="button" type="button">Exportar backup</button>
+        <label class="button secondary" for="import-data">Importar backup</label>
         <input id="import-data" type="file" accept=".json,application/json" hidden>
       </div>
+      <p id="backup-last" class="metadata" aria-live="polite"></p>
+      <p id="backup-status" class="metadata" aria-live="polite"></p>
       <p id="data-status" class="metadata" aria-live="polite"></p>
+      <p class="metadata">O backup automático tenta atualizar o arquivo escolhido quando você sai do app (se o navegador permitir). Caso contrário, o status ficará como pendente até o próximo export manual.</p>
     </section>
     <section aria-labelledby="app-heading" class="settings-section">
       <h2 id="app-heading">Aplicativo</h2>
@@ -51,16 +77,34 @@ export function mount(container) {
     refreshInstallArea(isInstallAvailable());
   });
 
-  container.querySelector("#export-data").addEventListener("click", () => {
-    downloadBackup();
-    status.textContent = "Arquivo de backup gerado.";
+  renderBackupInfo(container);
+
+  container.querySelector("#export-data").addEventListener("click", async () => {
+    const result = await exportBackup();
+    if (result && result.aborted) {
+      status.textContent = "Exportação cancelada.";
+    } else if (result && result.ok) {
+      status.textContent = result.method === "handle" ? "Backup salvo no arquivo escolhido." : "Arquivo de backup gerado.";
+    } else {
+      status.textContent = "Arquivo de backup gerado.";
+    }
+    renderBackupInfo(container);
   });
 
   fileInput.addEventListener("change", async () => {
     const file = fileInput.files?.[0];
     if (!file) return;
 
-    const backup = parseBackup(await file.text());
+    let text;
+    try {
+      text = await file.text();
+    } catch {
+      status.textContent = "Não foi possível ler o arquivo.";
+      fileInput.value = "";
+      return;
+    }
+
+    const backup = parseBackup(text);
     if (!backup) {
       status.textContent = "Arquivo inválido. Use um arquivo JSON exportado pelo Cátedra.";
       fileInput.value = "";
@@ -72,9 +116,13 @@ export function mount(container) {
       return;
     }
 
+    // Optional: offer to export current state before replace (keep pending handling)
+    // We keep current data safe until confirmed; parse already validated.
+
     applyBackup(backup);
     status.textContent = "Dados importados com sucesso.";
     fileInput.value = "";
+    renderBackupInfo(container);
   });
 
   container.querySelector("#clear-data").addEventListener("click", () => {
@@ -84,5 +132,20 @@ export function mount(container) {
     clearAllNotes();
     replaceFavorites([]);
     status.textContent = "Todos os dados foram apagados.";
+    renderBackupInfo(container);
+    // Try to reflect pending state after clear
   });
+
+  // Keep status live when data changes elsewhere or after auto-backup attempts
+  if (typeof document !== "undefined") {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") renderBackupInfo(container);
+    });
+    // Also update after pagehide/tryAutoBackup
+    if (typeof window !== "undefined") {
+      window.addEventListener("pagehide", async () => {
+        await tryAutoBackup();
+      });
+    }
+  }
 }
